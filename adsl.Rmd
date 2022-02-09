@@ -1,0 +1,126 @@
+---
+title: "Create ADSL"
+author: "Christina Fillmore"
+date: "03/02/2022"
+output: html_document
+---
+The first step is to load our pharamverse libraries and data. Here we are trying to create an ADSL dataset using the pilot CDISC data. 
+```{r setup}
+library(metacore)
+library(metatools)
+library(admiral)
+library(xportr)
+library(admiral.test) 
+library(dplyr)
+library(tidyr)
+ # Read in data 
+data("dm")
+data("ds")
+data("ex")
+data("vs")
+data("lb")
+ # Read in metacore object 
+metacore <- define_to_metacore(metacore_example("ADaM_define.xml"), quiet = TRUE) %>% 
+   select_dataset("ADSL")
+```
+
+## Start Building 
+
+
+The first thing we are going to do is pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don't you can call `build_from_derived` with just an empty list and the error will tell you which datasets you need to supply. 
+```{r, error=TRUE}
+build_from_derived(metacore, list(), predecessor_only = FALSE)
+```
+
+In this case all the columns come from `DM` so that is the only dataset I will pass into `build_from_derived`. The result is all the columns are combined to make a new dataset and any columns that need renaming between SDTM and ADAM are renamed. 
+```{r}
+adsl_preds <- build_from_derived(metacore, list("dm" = dm), predecessor_only = FALSE, keep = TRUE)
+head(adsl_preds)
+```
+
+Now we have the base dataset, we can start to create the new variables with the help of the admiral package. First we are going to start with treatment start and end dates. If we check the variables that should be in ADSL we see we need `TRTSDT`and `TRTEDT`.
+
+```{r, error=TRUE}
+check_variables(adsl_preds, metacore)
+```
+
+
+
+
+```{r, dates}
+adsl_dates <- adsl_preds %>%
+   derive_var_trtsdtm(dataset_ex = ex) %>% # Derive Datetime of First Exposure to Treatment
+   derive_var_trtedtm(dataset_ex = ex) %>% # Derive Datetime of Last Exposure to Treatment
+   derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%  #Convert Datetime variables to date 
+   select(-TRTSDTM, -TRTEDTM) # Remove Datetime variables 
+```
+
+
+
+```{r, disposition}
+adsl_dispo <- adsl_dates %>% 
+   # Derive a Disposition Status 
+  derive_disposition_status(
+    dataset_ds = ds,
+    new_var = EOSSTT,
+    status_var = DSDECOD,
+    filter = DSCAT == "DISPOSITION EVENT"
+  ) %>%
+   # Derive a Disposition Reason
+  derive_disposition_reason(
+    dataset_ds = ds,
+    new_var = DCSREAS,
+    reason_var = DSDECOD,
+    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+  ) %>% 
+   # Derived Disposition Date 
+   derive_disposition_dt(
+    dataset_ds = ds,
+    new_var = RFENDT,
+    dtc = DSSTDTC,
+    filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+  )
+
+```
+
+
+
+```{r BMI}
+# Get heights at screening cause those are the only heights available 
+heights <- vs %>% 
+   filter(VSTEST == "Height") %>% 
+   select(USUBJID, VSTEST, VSSTRESN)
+
+bmis <- vs %>% 
+   # Get baseline weight 
+   filter( VISIT == "BASELINE", VSTEST == "Weight") %>% 
+   select(USUBJID, VSTEST, VSSTRESN) %>% 
+   # Combine with height 
+   bind_rows(heights) %>% 
+   # Pivot to a row per subject and calculate BMIBL
+   pivot_wider(names_from = VSTEST, values_from = VSSTRESN) %>% 
+   mutate(BMIBL = compute_bmi(Height, Weight)) %>% 
+   rename(WEIGHTBL = Weight, HEIGHTBL = Height) %>%
+   # Create the BMI grouping using the control terminology 
+   create_cat_var(metacore, BMIBL, BMIBLGR1)
+bmis 
+
+adsl_bmi <- left_join(adsl_dispo, bmis, by = "USUBJID")
+
+```
+
+
+## Apply Codelists 
+
+```{r}
+adsl_ct <- adsl_bmi %>% 
+   create_cat_var(metacore, AGE, AGEGR1, AGEGR1N) %>% 
+   create_var_from_codelist(metacore, RACE, RACEN) %>% 
+   create_var_from_codelist(metacore, TRT01P, TRT01PN) %>% 
+     mutate(
+    SAFFL = if_else(!is.na(TRTSDT), "Y", NA_character_))
+check_variables(adsl_ct, metacore)
+
+   
+```
+
