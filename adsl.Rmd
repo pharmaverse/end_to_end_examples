@@ -14,6 +14,7 @@ library(dplyr)
 library(tidyr)
 library(safetyData)
 library(lubridate)
+library(stringr)
 # Read in data 
 data("sdtm_dm")
 data("sdtm_ds")
@@ -25,7 +26,8 @@ data("sdtm_sc")
 data("sdtm_mh")
 data("sdtm_qs")
 # Read in metacore object 
-metacore <- define_to_metacore(metacore_example("ADaM_define.xml"), quiet = TRUE) %>% 
+load(metacore_example("pilot_ADaM.rda"))
+metacore <- metacore %>% 
    select_dataset("ADSL")
 ```
 
@@ -52,6 +54,7 @@ adsl_ct <- adsl_preds %>%
    create_var_from_codelist(metacore, RACE, RACEN) %>% 
    create_var_from_codelist(metacore, TRT01P, TRT01PN) %>% 
    mutate(
+      SITEID = as.character(SITEID),
       SITEGR1 = SITEID, 
       TRT01A = TRT01P,
       TRT01AN = TRT01PN,
@@ -104,6 +107,7 @@ adsl_dispo <- adsl_dates %>%
    mutate(
       DISCONFL = if_else(DCDECOD != "COMPLETED", "Y", NA_character_),
       DSRAEFL = if_else(DCDECOD != "ADVERSE EVENT", "Y", NA_character_))
+
 # Get end of treatment visit 
 adsl_dispo <- sdtm_ds %>% 
    filter(DSTERM =='PROTOCOL COMPLETED') %>% 
@@ -200,14 +204,19 @@ adsl_raw <- sdtm_qs %>%
    drop_unspec_vars(metacore) #This will drop any columns that aren't specificed in the metacore object
 
 ```
+
+
 Now we have all the variables defined we can run some checks before applying the necessary formatting. 
 ```{r checks}
+test <- metacore$var_spec %>% 
+   select(variable, type) %>% 
+   mutate(dataset = "ADSL")
 adsl_raw %>% 
    check_variables(metacore) %>% # Check all variables specified are present and no more
-   # check_ct_data(metacore) %>% # Checks all variables with CT only contain values within the CT
+   check_ct_data(metacore) %>% # Checks all variables with CT only contain values within the CT
    order_cols(metacore) %>% # Orders the columns according to the spec
    sort_by_key(metacore) %>% # Sorts the rows by the sort keys 
-   xportr_type(metacore) %>% # Coerce variable type to match spec
+   xportr_type(test) %>% # Coerce variable type to match spec
    xportr_length(metacore) %>% # Assigns SAS length from a variable level metadata 
    xportr_label(metacore) %>% # Assigns variable label from metacore specifications 
    xportr_df_label(metacore) # Assigns dataset label from metacore specifications
