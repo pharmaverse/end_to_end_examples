@@ -13,6 +13,7 @@ library(xportr)
 library(dplyr)
 library(tidyr)
 library(safetyData)
+library(lubridate)
 # Read in data 
 data("sdtm_dm")
 data("sdtm_ds")
@@ -20,6 +21,9 @@ data("sdtm_ex")
 data("sdtm_vs")
 data("sdtm_lb")
 data("sdtm_sv")
+data("sdtm_sc")
+data("sdtm_mh")
+data("sdtm_qs")
 # Read in metacore object 
 metacore <- define_to_metacore(metacore_example("ADaM_define.xml"), quiet = TRUE) %>% 
    select_dataset("ADSL")
@@ -100,6 +104,12 @@ adsl_dispo <- adsl_dates %>%
    mutate(
       DISCONFL = if_else(DCDECOD != "COMPLETED", "Y", NA_character_),
       DSRAEFL = if_else(DCDECOD != "ADVERSE EVENT", "Y", NA_character_))
+# Get end of treatment visit 
+adsl_dispo <- sdtm_ds %>% 
+   filter(DSTERM =='PROTOCOL COMPLETED') %>% 
+   mutate(VISNUMEN = if_else(VISITNUM == 13, 12, VISITNUM)) %>% 
+   select(USUBJID, VISNUMEN) %>% 
+   left_join(adsl_dispo, ., by = "USUBJID")
 
 ```
 
@@ -146,9 +156,10 @@ completer_cal <- function(.data, wk_num, sv){
 }
 
 first_visit <- sdtm_sv %>% 
-   filter(VISITNUM == 1)%>% 
-   select(USUBJID, SVSTDTC) %>% 
-   rename(VISIT1DT = SVSTDTC)
+   filter(VISITNUM == 1) %>% 
+   mutate(VISIT1DT = as_date(SVSTDTC)) %>%
+   select(USUBJID, VISIT1DT) 
+
 adsl_fls <- adsl_bmi %>% 
    completer_cal(8, sdtm_sv) %>% 
    completer_cal(16, sdtm_sv) %>% 
@@ -156,7 +167,49 @@ adsl_fls <- adsl_bmi %>%
    left_join(first_visit, by= "USUBJID")
 ```
 
-```{r}
-check_variables(adsl_fls, metacore)
+```{r Medical History}
+adsl_ed <- sdtm_sc %>% 
+   filter(SCTESTCD == "EDLEVEL") %>% 
+   select(USUBJID, SCSTRESN) %>% 
+   rename(EDUCLVL = SCSTRESN) %>% 
+   left_join(adsl_fls, ., by = "USUBJID")
+
+adsl_alz <- sdtm_qs %>% 
+   group_by(USUBJID) %>% 
+   filter(QSCAT == "ALZHEIMER'S DISEASE ASSESSMENT SCALE") %>%
+   summarise(MMSETOT = sum(as.numeric(QSORRES), na.rm = TRUE)) %>% 
+   left_join(adsl_ed, ., by = "USUBJID")
+
+adsl_mh <- sdtm_mh %>% 
+   filter(MHCAT == "PRIMARY DIAGNOSIS") %>% 
+   mutate(DISONSDT = as_date(MHSTDTC)) %>%
+   select(USUBJID, DISONSDT) %>% 
+   left_join(adsl_alz, ., by = "USUBJID") %>% 
+   mutate(DURDIS = interval(DISONSDT, VISIT1DT) %/% months(1)) %>% 
+   create_cat_var(metacore, DURDIS, DURDSGR1)
+```
+
+
+```{r Efficacy Flag}
+adsl_raw <- sdtm_qs %>% 
+   filter(VISITNUM > 3) %>% 
+   group_by(USUBJID) %>% 
+   summarise(efffl = any(QSTEST == "ADAS-COG(11) Subscore") & any(QSTESTCD == "CIBIC")) %>% 
+   left_join(adsl_mh, by = "USUBJID") %>% 
+   mutate(EFFFL = if_else(efffl & SAFFL == "Y", "Y", "N")) %>% 
+   drop_unspec_vars(metacore) #This will drop any columns that aren't specificed in the metacore object
+
+```
+Now we have all the variables defined we can run some checks before applying the necessary formatting. 
+```{r checks}
+adsl_raw %>% 
+   check_variables(metacore) %>% # Check all variables specified are present and no more
+   # check_ct_data(metacore) %>% # Checks all variables with CT only contain values within the CT
+   order_cols(metacore) %>% # Orders the columns according to the spec
+   sort_by_key(metacore) %>% # Sorts the rows by the sort keys 
+   xportr_type(metacore) %>% # Coerce variable type to match spec
+   xportr_length(metacore) %>% # Assigns SAS length from a variable level metadata 
+   xportr_label(metacore) %>% # Assigns variable label from metacore specifications 
+   xportr_df_label(metacore) # Assigns dataset label from metacore specifications
 ```
 
