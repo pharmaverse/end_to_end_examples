@@ -1,0 +1,9 @@
+theme = "hugo-theme-learn"
+baseURL = ""
+languageCode = "en-us"
+title = "pharmaverse examples"
+relativeurls = true
+publishDir = "docs"
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
