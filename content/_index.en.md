@@ -7,3 +7,5 @@ title: "Learn Theme for Hugo"
 Here are some examples!!
 
 Some more copy.
+
+{{% children depth="3" description="true" %}}
