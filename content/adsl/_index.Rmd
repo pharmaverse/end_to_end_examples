@@ -4,8 +4,13 @@ author: "Christina Fillmore"
 date: "03/02/2022"
 output: html_document
 ---
-The first step is to load our pharamverse libraries and data. Here we are trying to create an ADSL dataset using the pilot CDISC data. 
-```{r setup}
+The first step is to load our pharamverse libraries and data. Here we are trying to create an ADSL dataset using the pilot CDISC data.
+
+```{r setup, warning=FALSE, results='hold'}
+options(repos = c(
+  pharmaverse = 'https://pharmaverse.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+
 library(metacore)
 library(metatools)
 library(admiral)
@@ -35,6 +40,7 @@ metacore <- metacore %>%
 
 
 The first thing we are going to do is pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don't you can call `build_from_derived` with just an empty list and the error will tell you which datasets you need to supply. 
+
 ```{r, error=TRUE}
 build_from_derived(metacore, list(), predecessor_only = FALSE)
 ```
@@ -211,6 +217,7 @@ Now we have all the variables defined we can run some checks before applying the
 test <- metacore$var_spec %>% 
    select(variable, type) %>% 
    mutate(dataset = "ADSL")
+
 adsl_raw %>% 
    check_variables(metacore) %>% # Check all variables specified are present and no more
    check_ct_data(metacore) %>% # Checks all variables with CT only contain values within the CT
