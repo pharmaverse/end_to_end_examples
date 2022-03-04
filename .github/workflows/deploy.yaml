@@ -32,14 +32,16 @@ jobs:
       - name: Restore packages
         shell: Rscript {0}
         run: |
+          options(repos = c(RSPM = "https://packagemanager.rstudio.com/all/latest"))
+          options(renv.config.repos.override = getOption("repos"))
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
 
       - name: Build site 
         #if: ${{ github.ref == 'refs/heads/main' }}
+        shell: Rscript {0}
         run: |
           blogdown::build_site(build_rmd = TRUE)
-        shell: Rscript {0}
           
       - name: Deploy site 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
