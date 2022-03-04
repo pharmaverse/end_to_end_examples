@@ -741,17 +741,17 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "2.4.3",
+      "Version": "2.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a376b424c4817cda4920bbbeb3364e85"
+      "Hash": "c0e49a9760983e81e55cdd9be92e7182"
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.29",
+      "Version": "0.30",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e2e5fb1a74fbb68b27d6efc5372635dc"
+      "Hash": "e83f48136b041845e50a6658feffb197"
     },
     "xml2": {
       "Package": "xml2",
@@ -763,12 +763,14 @@
     "xportr": {
       "Package": "xportr",
       "Version": "0.0.0.9001",
-      "Source": "Repository",
-      "Repository": "https://pharmaverse.r-universe.dev",
-      "RemoteUrl": "https://github.com/atorus-research/xportr",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "xportr",
+      "RemoteUsername": "atorus-research",
       "RemoteRef": "HEAD",
       "RemoteSha": "fe8c7cd53d29ea9e57ac9ffbfbbacd8fe54b6b76",
-      "Hash": "ab92c6fbe0b25f89775e4d579e89106b"
+      "Hash": "7fc8b4e52d15f1de37c41bc10398bb56"
     },
     "yaml": {
       "Package": "yaml",
