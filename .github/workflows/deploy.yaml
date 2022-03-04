@@ -36,6 +36,11 @@ jobs:
           options(renv.config.repos.override = getOption("repos"))
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
+          
+      - name: Install hugo
+        shell: Rscript {0}
+        run: |
+          blogdown::install_hugo()  
 
       - name: Build site 
         #if: ${{ github.ref == 'refs/heads/main' }}
