@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - main  # Set a branch to deploy
-      - add-cicd # Note has logic around deployment
+      - develop # Note has logic around deployment
       
 name: build and deploy
 
@@ -48,7 +48,7 @@ jobs:
           
       - name: Deploy site 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
-        #if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: docs # The folder the action should deploy.
