@@ -3,6 +3,7 @@ title: "Create ADSL"
 author: "Christina Fillmore"
 date: "03/02/2022"
 output: html_document
+description: "An example of how to generate an ADSL dataset from STDM"
 ---
 The first step is to load our pharamverse libraries and data. Here we are trying to create an ADSL dataset using the pilot CDISC data.
 
