@@ -1,0 +1,16 @@
+---
+title: "pharmaverse examples"
+author: "pharmaverse"
+output: html_document
+chapter: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# pharmaverse examples
+
+Here are some examples!!
+
+Some more copy.
