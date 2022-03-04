@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - main  # Set a branch to deploy
+      - add-cicd # Note has logic around deployment
+      
+name: build and deploy
+
+jobs:
+  production:
+    runs-on: macOS-latest
+    env:
+      #GITHUB_PAT: ${{ secrets.GH_OPENPHARMA }}
+      RENV_PATHS_ROOT: ~/.local/share/renv
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@master
+        with:
+          r-version: 'release'
+
+      - uses: r-lib/actions/setup-pandoc@master
+      
+      - name: Cache packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+      
+      - name: Restore packages
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+
+      - name: Build site 
+        #if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          blogdown::build_site(build_rmd = TRUE)
+        shell: Rscript {0}
+          
+      - name: Deploy site 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        #if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: docs # The folder the action should deploy.
