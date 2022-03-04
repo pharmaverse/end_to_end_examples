@@ -12,5 +12,5 @@ An example:
 
 - The ADSL example is located at `content/adsl/_index.Rmd`
 - Inside the `yaml` of `content/adsl/_index.Rmd` is a code block with `title: Create adsl`. 
-- The table of contents renders the pretty title.
+- The table of contents renders `Create adsl`.
 - `content/adsl/_index.Rmd` is rendered to html and added to the site via CICD.
