@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.93.2" />
+    <meta name="description" content="Examples of use of the pharmaverse packages">
+
+
+    <link rel="icon" href="../../images/favicon.png" type="image/png">
+
+    <title>Create ADSL - pharmaverse examples</title>
+
+    
+    <link href="../../css/nucleus.css?1646403784" rel="stylesheet">
+    <link href="../../css/fontawesome-all.min.css?1646403784" rel="stylesheet">
+    <link href="../../css/hybrid.css?1646403784" rel="stylesheet">
+    <link href="../../css/featherlight.min.css?1646403784" rel="stylesheet">
+    <link href="../../css/perfect-scrollbar.min.css?1646403784" rel="stylesheet">
+    <link href="../../css/auto-complete.css?1646403784" rel="stylesheet">
+    <link href="../../css/atom-one-dark-reasonable.css?1646403784" rel="stylesheet">
+    <link href="../../css/theme.css?1646403784" rel="stylesheet">
+    <link href="../../css/tabs.css?1646403784" rel="stylesheet">
+    <link href="../../css/hugo-theme.css?1646403784" rel="stylesheet">
+    
+    <link href="../../css/theme-red.css?1646403784" rel="stylesheet">
+    
+    <link href="../../css/foo.css?1646403784" rel="stylesheet"><link href="../../css/bar.css?1646403784" rel="stylesheet">
+
+    <script src="../../js/jquery-3.3.1.min.js?1646403784"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="../../data/adsl/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <img src="../../images/logo.png" alt="Logo">
+    </div>
+    
+  </div>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/data/" title="Data" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="../../data/">
+          <b>1. </b>Data
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/data/adsl/" title="Create ADSL" class="dd-item
+        parent
+        active
+        
+        ">
+      <a href="../../data/adsl/">
+          Create ADSL
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/pharmaverse/end_to_end_examples/edit/develop/content/data/adsl/_index.html" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                   Create ADSL
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Create ADSL
+            </h1>
+          
+
+        
+
+
+
+	
+
+
+<p>The first step is to load our pharamverse libraries and data. Here we are trying to create an ADSL dataset using the pilot CDISC data.</p>
+<pre class="r"><code>options(repos = c(
+  pharmaverse = &#39;https://pharmaverse.r-universe.dev&#39;,
+  CRAN = &#39;https://cloud.r-project.org&#39;))
+
+library(metacore)
+library(metatools)
+library(admiral)
+library(xportr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:admiral&#39;:
+## 
+##     filter_if</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(tidyr)
+library(safetyData)
+library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     date, intersect, setdiff, union</code></pre>
+<pre class="r"><code>library(stringr)
+# Read in data 
+data(&quot;sdtm_dm&quot;)
+data(&quot;sdtm_ds&quot;)
+data(&quot;sdtm_ex&quot;)
+data(&quot;sdtm_vs&quot;)
+data(&quot;sdtm_lb&quot;)
+data(&quot;sdtm_sv&quot;)
+data(&quot;sdtm_sc&quot;)
+data(&quot;sdtm_mh&quot;)
+data(&quot;sdtm_qs&quot;)
+# Read in metacore object 
+load(metacore_example(&quot;pilot_ADaM.rda&quot;))
+metacore &lt;- metacore %&gt;% 
+   select_dataset(&quot;ADSL&quot;)</code></pre>
+<div id="start-building" class="section level2">
+<h2>Start Building</h2>
+<p>The first thing we are going to do is pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don’t you can call <code>build_from_derived</code> with just an empty list and the error will tell you which datasets you need to supply.</p>
+<pre class="r"><code>build_from_derived(metacore, list(), predecessor_only = FALSE)</code></pre>
+<pre><code>## Error in build_from_derived(metacore, list(), predecessor_only = FALSE): Not all datasets provided. Please pass the following dataset(s):
+## DM</code></pre>
+<p>In this case all the columns come from <code>DM</code> so that is the only dataset I will pass into <code>build_from_derived</code>. The result is all the columns are combined to make a new dataset and any columns that need renaming between SDTM and ADAM are renamed.</p>
+<pre class="r"><code>adsl_preds &lt;- build_from_derived(metacore, list(&quot;dm&quot; = sdtm_dm), predecessor_only = FALSE, keep = TRUE)
+head(adsl_preds)</code></pre>
+<pre><code>##        STUDYID     USUBJID SUBJID SITEID                  ARM AGE  AGEU  RACE
+## 1 CDISCPILOT01 01-701-1015   1015    701              Placebo  63 YEARS WHITE
+## 2 CDISCPILOT01 01-701-1023   1023    701              Placebo  64 YEARS WHITE
+## 3 CDISCPILOT01 01-701-1028   1028    701 Xanomeline High Dose  71 YEARS WHITE
+## 4 CDISCPILOT01 01-701-1033   1033    701  Xanomeline Low Dose  74 YEARS WHITE
+## 5 CDISCPILOT01 01-701-1034   1034    701 Xanomeline High Dose  77 YEARS WHITE
+## 6 CDISCPILOT01 01-701-1047   1047    701              Placebo  85 YEARS WHITE
+##   SEX                 ETHNIC DTHFL    RFSTDTC    RFENDTC               TRT01P
+## 1   F     HISPANIC OR LATINO  &lt;NA&gt; 2014-01-02 2014-07-02              Placebo
+## 2   M     HISPANIC OR LATINO  &lt;NA&gt; 2012-08-05 2012-09-02              Placebo
+## 3   M NOT HISPANIC OR LATINO  &lt;NA&gt; 2013-07-19 2014-01-14 Xanomeline High Dose
+## 4   M NOT HISPANIC OR LATINO  &lt;NA&gt; 2014-03-18 2014-04-14  Xanomeline Low Dose
+## 5   F NOT HISPANIC OR LATINO  &lt;NA&gt; 2014-07-01 2014-12-30 Xanomeline High Dose
+## 6   F NOT HISPANIC OR LATINO  &lt;NA&gt; 2013-02-12 2013-03-29              Placebo</code></pre>
+<p>Now we have the base dataset, we can start to create the variable decodes and groups using thr control terminology.</p>
+<pre class="r"><code>adsl_ct &lt;- adsl_preds %&gt;% 
+   create_cat_var(metacore, AGE, AGEGR1, AGEGR1N) %&gt;% 
+   create_var_from_codelist(metacore, RACE, RACEN) %&gt;% 
+   create_var_from_codelist(metacore, TRT01P, TRT01PN) %&gt;% 
+   mutate(
+      SITEID = as.character(SITEID),
+      SITEGR1 = SITEID, 
+      TRT01A = TRT01P,
+      TRT01AN = TRT01PN,
+      ITTFL = if_else(!is.na(ARM) &amp; ARM != &quot;Screen Failure&quot;, &quot;Y&quot;, &quot;N&quot;))</code></pre>
+<pre class="r"><code>adsl_dates &lt;- adsl_ct %&gt;%
+   derive_var_trtsdtm(dataset_ex = sdtm_ex) %&gt;% # Derive Datetime of First Exposure to Treatment
+   derive_var_trtedtm(dataset_ex = sdtm_ex) %&gt;% # Derive Datetime of Last Exposure to Treatment
+   derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %&gt;%  #Convert Datetime variables to date 
+   mutate(TRTDURD = as.numeric(TRTEDT - TRTSDT) + 1,
+          CUMDOSE = TRT01PN * TRTDURD,
+          AVGDD = CUMDOSE/TRTDURD,
+          SAFFL = if_else(ITTFL == &quot;Y&quot; &amp; !is.na(TRTSDT), &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
+   drop_unspec_vars(metacore)</code></pre>
+<pre class="r"><code>adsl_dispo &lt;- adsl_dates %&gt;% 
+   # Derive a Disposition Status 
+   derive_disposition_status(
+      dataset_ds = sdtm_ds,
+      new_var = EOSSTT,
+      status_var = DSDECOD,
+      filter = DSCAT == &quot;DISPOSITION EVENT&quot;
+   ) %&gt;%
+   # Derive a Disposition Reason
+   derive_disposition_reason(
+      dataset_ds = sdtm_ds,
+      new_var = DCSREAS,
+      reason_var = DSDECOD,
+      filter = DSCAT == &quot;DISPOSITION EVENT&quot; &amp; DSDECOD != &quot;SCREEN FAILURE&quot;
+   ) %&gt;% 
+   # Derived Disposition Date 
+   derive_disposition_dt(
+      dataset_ds = sdtm_ds,
+      new_var = RFENDT,
+      dtc = DSSTDTC,
+      filter_ds = DSCAT == &quot;OTHER EVENT&quot; &amp; DSDECOD == &quot;FINAL RETRIEVAL VISIT&quot;
+   ) %&gt;% 
+   # Getting the standardize dispositions from codelist 
+   create_var_from_codelist(metacore, EOSSTT, DCDECOD) %&gt;% 
+   # Creating disposition flags 
+   mutate(
+      DISCONFL = if_else(DCDECOD != &quot;COMPLETED&quot;, &quot;Y&quot;, NA_character_),
+      DSRAEFL = if_else(DCDECOD != &quot;ADVERSE EVENT&quot;, &quot;Y&quot;, NA_character_))</code></pre>
+<pre><code>## Warning: `derive_disposition_dt()` was deprecated in admiral 0.6.0.
+## Please use `derive_var_disposition_dt()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## Warning: `derive_disposition_reason()` was deprecated in admiral 0.6.0.
+## Please use `derive_vars_disposition_reason()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## Warning: `derive_disposition_status()` was deprecated in admiral 0.6.0.
+## Please use `derive_var_disposition_status()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+<pre class="r"><code># Get end of treatment visit 
+adsl_dispo &lt;- sdtm_ds %&gt;% 
+   filter(DSTERM ==&#39;PROTOCOL COMPLETED&#39;) %&gt;% 
+   mutate(VISNUMEN = if_else(VISITNUM == 13, 12, VISITNUM)) %&gt;% 
+   select(USUBJID, VISNUMEN) %&gt;% 
+   left_join(adsl_dispo, ., by = &quot;USUBJID&quot;)</code></pre>
+<pre class="r"><code># Get heights at screening cause those are the only heights available 
+heights &lt;- sdtm_vs %&gt;% 
+   filter(VISITNUM == 1, VSTESTCD == &#39;HEIGHT&#39;) %&gt;% 
+   select(USUBJID, VSTEST, VSSTRESN)
+
+bmis &lt;- sdtm_vs %&gt;% 
+   # Get baseline weight 
+   filter( VISITNUM == 3, VSTESTCD == &quot;WEIGHT&quot;) %&gt;% 
+   select(USUBJID, VSTEST, VSSTRESN) %&gt;% 
+   # Combine with height 
+   bind_rows(heights) %&gt;% 
+   # Pivot to a row per subject and calculate BMIBL
+   pivot_wider(names_from = VSTEST, values_from = VSSTRESN) %&gt;% 
+   mutate(BMIBL = compute_bmi(Height, Weight)) %&gt;% 
+   rename(WEIGHTBL = Weight, HEIGHTBL = Height) %&gt;%
+   # Create the BMI grouping using the control terminology 
+   create_cat_var(metacore, BMIBL, BMIBLGR1)
+bmis </code></pre>
+<pre><code>## # A tibble: 254 × 5
+##    USUBJID     WEIGHTBL HEIGHTBL BMIBL BMIBLGR1
+##    &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   
+##  1 01-701-1015     54.4     147.  25.1 25-&lt;30  
+##  2 01-701-1023     80.3     163.  30.4 &gt;=30    
+##  3 01-701-1028     99.3     178.  31.4 &gt;=30    
+##  4 01-701-1033     88.4     175.  28.8 25-&lt;30  
+##  5 01-701-1034     62.6     155.  26.1 25-&lt;30  
+##  6 01-701-1047     67.1     149.  30.4 &gt;=30    
+##  7 01-701-1097     78.0     169.  27.3 25-&lt;30  
+##  8 01-701-1111     59.9     158.  23.9 &lt;25     
+##  9 01-701-1115     78.9     182.  23.9 &lt;25     
+## 10 01-701-1118     71.2     180.  21.9 &lt;25     
+## # … with 244 more rows</code></pre>
+<pre class="r"><code>adsl_bmi &lt;- left_join(adsl_dispo, bmis, by = &quot;USUBJID&quot;)</code></pre>
+</div>
+<div id="apply-codelists" class="section level2">
+<h2>Apply Codelists</h2>
+<pre class="r"><code>completer_cal &lt;- function(.data, wk_num, sv){
+   new_col &lt;- paste0(&quot;COMP&quot;, wk_num, &quot;FL&quot;) %&gt;% sym()
+   sv %&gt;% 
+      group_by(USUBJID) %&gt;% 
+      filter(VISIT == paste(&quot;WEEK&quot;, wk_num)) %&gt;% 
+      select(USUBJID, SVSTDTC) %&gt;% 
+      left_join(.data, . , by = &quot;USUBJID&quot;) %&gt;% 
+      mutate({{new_col }}:= if_else(!is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC, &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
+      select(-SVSTDTC)
+}
+
+first_visit &lt;- sdtm_sv %&gt;% 
+   filter(VISITNUM == 1) %&gt;% 
+   mutate(VISIT1DT = as_date(SVSTDTC)) %&gt;%
+   select(USUBJID, VISIT1DT) 
+
+adsl_fls &lt;- adsl_bmi %&gt;% 
+   completer_cal(8, sdtm_sv) %&gt;% 
+   completer_cal(16, sdtm_sv) %&gt;% 
+   completer_cal(24, sdtm_sv) %&gt;% 
+   left_join(first_visit, by= &quot;USUBJID&quot;)</code></pre>
+<pre class="r"><code>adsl_ed &lt;- sdtm_sc %&gt;% 
+   filter(SCTESTCD == &quot;EDLEVEL&quot;) %&gt;% 
+   select(USUBJID, SCSTRESN) %&gt;% 
+   rename(EDUCLVL = SCSTRESN) %&gt;% 
+   left_join(adsl_fls, ., by = &quot;USUBJID&quot;)
+
+adsl_alz &lt;- sdtm_qs %&gt;% 
+   group_by(USUBJID) %&gt;% 
+   filter(QSCAT == &quot;ALZHEIMER&#39;S DISEASE ASSESSMENT SCALE&quot;) %&gt;%
+   summarise(MMSETOT = sum(as.numeric(QSORRES), na.rm = TRUE)) %&gt;% 
+   left_join(adsl_ed, ., by = &quot;USUBJID&quot;)
+
+adsl_mh &lt;- sdtm_mh %&gt;% 
+   filter(MHCAT == &quot;PRIMARY DIAGNOSIS&quot;) %&gt;% 
+   mutate(DISONSDT = as_date(MHSTDTC)) %&gt;%
+   select(USUBJID, DISONSDT) %&gt;% 
+   left_join(adsl_alz, ., by = &quot;USUBJID&quot;) %&gt;% 
+   mutate(DURDIS = interval(DISONSDT, VISIT1DT) %/% months(1)) %&gt;% 
+   create_cat_var(metacore, DURDIS, DURDSGR1)</code></pre>
+<pre class="r"><code>adsl_raw &lt;- sdtm_qs %&gt;% 
+   filter(VISITNUM &gt; 3) %&gt;% 
+   group_by(USUBJID) %&gt;% 
+   summarise(efffl = any(QSTEST == &quot;ADAS-COG(11) Subscore&quot;) &amp; any(QSTESTCD == &quot;CIBIC&quot;)) %&gt;% 
+   left_join(adsl_mh, by = &quot;USUBJID&quot;) %&gt;% 
+   mutate(EFFFL = if_else(efffl &amp; SAFFL == &quot;Y&quot;, &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
+   drop_unspec_vars(metacore) #This will drop any columns that aren&#39;t specificed in the metacore object</code></pre>
+<p>Now we have all the variables defined we can run some checks before applying the necessary formatting.</p>
+<pre class="r"><code>test &lt;- metacore$var_spec %&gt;% 
+   select(variable, type) %&gt;% 
+   mutate(dataset = &quot;ADSL&quot;)
+
+adsl_raw %&gt;% 
+   check_variables(metacore) %&gt;% # Check all variables specified are present and no more
+   check_ct_data(metacore) %&gt;% # Checks all variables with CT only contain values within the CT
+   order_cols(metacore) %&gt;% # Orders the columns according to the spec
+   sort_by_key(metacore) %&gt;% # Sorts the rows by the sort keys 
+   xportr_type(test) %&gt;% # Coerce variable type to match spec
+   xportr_length(metacore) %&gt;% # Assigns SAS length from a variable level metadata 
+   xportr_label(metacore) %&gt;% # Assigns variable label from metacore specifications 
+   xportr_df_label(metacore) # Assigns dataset label from metacore specifications</code></pre>
+<pre><code>## No missing or extra variables</code></pre>
+<pre><code>## # A tibble: 248 × 49
+##    STUDYID     USUBJID SUBJID SITEID SITEGR1 ARM   TRT01P TRT01PN TRT01A TRT01AN
+##    &lt;chr&gt;       &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+##  1 CDISCPILOT… 01-701…   1015 701    701     Plac… Place…       0 Place…       0
+##  2 CDISCPILOT… 01-701…   1023 701    701     Plac… Place…       0 Place…       0
+##  3 CDISCPILOT… 01-701…   1028 701    701     Xano… Xanom…      81 Xanom…      81
+##  4 CDISCPILOT… 01-701…   1033 701    701     Xano… Xanom…      54 Xanom…      54
+##  5 CDISCPILOT… 01-701…   1034 701    701     Xano… Xanom…      81 Xanom…      81
+##  6 CDISCPILOT… 01-701…   1047 701    701     Plac… Place…       0 Place…       0
+##  7 CDISCPILOT… 01-701…   1097 701    701     Xano… Xanom…      54 Xanom…      54
+##  8 CDISCPILOT… 01-701…   1111 701    701     Xano… Xanom…      54 Xanom…      54
+##  9 CDISCPILOT… 01-701…   1115 701    701     Xano… Xanom…      54 Xanom…      54
+## 10 CDISCPILOT… 01-701…   1118 701    701     Plac… Place…       0 Place…       0
+## # … with 238 more rows, and 39 more variables: TRTSDT &lt;dbl&gt;, TRTEDT &lt;dbl&gt;,
+## #   TRTDURD &lt;dbl&gt;, AVGDD &lt;dbl&gt;, CUMDOSE &lt;dbl&gt;, AGE &lt;dbl&gt;, AGEGR1 &lt;chr&gt;,
+## #   AGEGR1N &lt;dbl&gt;, AGEU &lt;chr&gt;, RACE &lt;chr&gt;, RACEN &lt;dbl&gt;, SEX &lt;chr&gt;,
+## #   ETHNIC &lt;chr&gt;, SAFFL &lt;chr&gt;, ITTFL &lt;chr&gt;, EFFFL &lt;chr&gt;, COMP8FL &lt;chr&gt;,
+## #   COMP16FL &lt;chr&gt;, COMP24FL &lt;chr&gt;, DISCONFL &lt;chr&gt;, DSRAEFL &lt;chr&gt;, DTHFL &lt;chr&gt;,
+## #   BMIBL &lt;dbl&gt;, BMIBLGR1 &lt;chr&gt;, HEIGHTBL &lt;dbl&gt;, WEIGHTBL &lt;dbl&gt;, EDUCLVL &lt;dbl&gt;,
+## #   DISONSDT &lt;dbl&gt;, DURDIS &lt;dbl&gt;, DURDSGR1 &lt;chr&gt;, VISIT1DT &lt;dbl&gt;, …</code></pre>
+</div>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="../../data/" title="Data"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="../../js/clipboard.min.js?1646403784"></script>
+    <script src="../../js/perfect-scrollbar.min.js?1646403784"></script>
+    <script src="../../js/perfect-scrollbar.jquery.min.js?1646403784"></script>
+    <script src="../../js/jquery.sticky.js?1646403784"></script>
+    <script src="../../js/featherlight.min.js?1646403784"></script>
+    <script src="../../js/highlight.pack.js?1646403784"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="../../js/modernizr.custom-3.6.0.js?1646403784"></script>
+    <script src="../../js/learn.js?1646403784"></script>
+    <script src="../../js/hugo-learn.js?1646403784"></script>
+    
+        
+            <script src="https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
