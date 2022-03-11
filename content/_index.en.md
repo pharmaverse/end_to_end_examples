@@ -1,5 +1,5 @@
 ---
-title: "Learn Theme for Hugo"
+title: "Pharmaverse Examples"
 ---
 
 # pharmaverse examples
