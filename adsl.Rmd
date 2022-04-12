@@ -69,8 +69,8 @@ adsl_dates <- adsl_ct %>%
    derive_var_trtsdtm(dataset_ex = sdtm_ex) %>% # Derive Datetime of First Exposure to Treatment
    derive_var_trtedtm(dataset_ex = sdtm_ex) %>% # Derive Datetime of Last Exposure to Treatment
    derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%  #Convert Datetime variables to date 
-   mutate(TRTDURD = as.numeric(TRTEDT - TRTSDT) + 1,
-          CUMDOSE = TRT01PN * TRTDURD,
+   mutate(TRTDURD = as.numeric(TRTEDT - TRTSDT) + 1, #derive_var_trtdurd
+          CUMDOSE = TRT01PN * TRTDURD, # switch to admiral 
           AVGDD = CUMDOSE/TRTDURD,
           SAFFL = if_else(ITTFL == "Y" & !is.na(TRTSDT), "Y", "N")) %>% 
    drop_unspec_vars(metacore)
