@@ -46,18 +46,28 @@ The first thing we are going to do is pull through all the columns that come dir
 build_from_derived(metacore, list(), predecessor_only = FALSE)
 ```
 
-In this case all the columns come from `DM` so that is the only dataset I will pass into `build_from_derived`. The result is all the columns are combined to make a new dataset and any columns that need renaming between SDTM and ADAM are renamed. 
+In this case all the columns come from `DM` so that is the only dataset I will pass into `build_from_derived`. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADAM are renamed. 
 ```{r demographcis}
-adsl_preds <- build_from_derived(metacore, list("dm" = sdtm_dm), predecessor_only = FALSE, keep = TRUE)
+adsl_preds <- build_from_derived(metacore, 
+                                 ds_list = list("dm" = sdtm_dm), 
+                                 predecessor_only = FALSE, keep = TRUE)
 head(adsl_preds)
 ```
 
 
-Now we have the base dataset, we can start to create the variable decodes and groups using thr control terminology. 
+Now we have the base dataset, we can start to create some variables. I am going to start with creating the subgroups using the control terminology, in this case AGEGR1. The metacore object holds all the metadata needed to make ADSL. Part of that metadat is the control terminology, which can help automate the creation of subgroups. We can look into the metacore object and see the control terminology for AGRGR1. 
+```{r}
+get_control_term(metacore, variable = AGEGR1)
+```
+
+Because this control terminology is written in a fairly standard format we can automate the creation of AGEGR1. The {metatools} function `create_cat_var` takes in a metacore object, a reference variable, in this case AGE because the is the continues variable AGEGR1 created from, and the name of the sub-grouped variable. It will take the control terminology from the sub-grouped variable and cut the reference variables accordingly. 
+
+Using a similar philosophy we can create the numeric version of RACE and TRT01P using the control terminology stored in the metacore object with the `create_var_from_codelist` function in {metatools}
 
 ```{r ct}
 adsl_ct <- adsl_preds %>% 
-   create_cat_var(metacore, AGE, AGEGR1, AGEGR1N) %>% 
+   create_cat_var(metacore, ref_var = AGE, 
+                  grp_var = AGEGR1, num_grp_var = AGEGR1N) %>% 
    create_var_from_codelist(metacore, RACE, RACEN) %>% 
    create_var_from_codelist(metacore, TRT01P, TRT01PN) %>% 
    mutate(
@@ -69,13 +79,14 @@ adsl_ct <- adsl_preds %>%
 ```
 
 
-
+Now we have sorted out what we can we easily do with control terminology it is time to start coding up some variables. We are going to start with the exposure variables. We need to get the start and end of treatment as well as the treatment duration, the cumulative and the average dose. 
 
 ```{r exposure}
 adsl_dates <- adsl_ct %>%
    derive_var_trtsdtm(dataset_ex = sdtm_ex) %>% # Derive Datetime of First Exposure to Treatment
    derive_var_trtedtm(dataset_ex = sdtm_ex) %>% # Derive Datetime of Last Exposure to Treatment
    derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%  #Convert Datetime variables to date 
+   derive_var_trtdurd() %>% 
    mutate(TRTDURD = as.numeric(TRTEDT - TRTSDT) + 1, #derive_var_trtdurd
           CUMDOSE = TRT01PN * TRTDURD, # switch to admiral 
           AVGDD = CUMDOSE/TRTDURD,
@@ -88,7 +99,7 @@ adsl_dates <- adsl_ct %>%
 ```{r disposition}
 adsl_dispo <- adsl_dates %>% 
    # Derive a Disposition Status 
-   derive_disposition_status(
+   derive_var_disposition_status(
       dataset_ds = sdtm_ds,
       new_var = EOSSTT,
       status_var = DSDECOD,
