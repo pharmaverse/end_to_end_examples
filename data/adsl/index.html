@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.93.2" />
+    <meta name="generator" content="Hugo 0.97.3" />
     <meta name="description" content="An example of how to generate an ADSL dataset from STDM">
 
 
@@ -12,22 +12,22 @@
     <title>Create ADSL - pharmaverse examples</title>
 
     
-    <link href="../../css/nucleus.css?1646409792" rel="stylesheet">
-    <link href="../../css/fontawesome-all.min.css?1646409792" rel="stylesheet">
-    <link href="../../css/hybrid.css?1646409792" rel="stylesheet">
-    <link href="../../css/featherlight.min.css?1646409792" rel="stylesheet">
-    <link href="../../css/perfect-scrollbar.min.css?1646409792" rel="stylesheet">
-    <link href="../../css/auto-complete.css?1646409792" rel="stylesheet">
-    <link href="../../css/atom-one-dark-reasonable.css?1646409792" rel="stylesheet">
-    <link href="../../css/theme.css?1646409792" rel="stylesheet">
-    <link href="../../css/tabs.css?1646409792" rel="stylesheet">
-    <link href="../../css/hugo-theme.css?1646409792" rel="stylesheet">
+    <link href="../../css/nucleus.css?1650523828" rel="stylesheet">
+    <link href="../../css/fontawesome-all.min.css?1650523828" rel="stylesheet">
+    <link href="../../css/hybrid.css?1650523828" rel="stylesheet">
+    <link href="../../css/featherlight.min.css?1650523828" rel="stylesheet">
+    <link href="../../css/perfect-scrollbar.min.css?1650523828" rel="stylesheet">
+    <link href="../../css/auto-complete.css?1650523828" rel="stylesheet">
+    <link href="../../css/atom-one-dark-reasonable.css?1650523828" rel="stylesheet">
+    <link href="../../css/theme.css?1650523828" rel="stylesheet">
+    <link href="../../css/tabs.css?1650523828" rel="stylesheet">
+    <link href="../../css/hugo-theme.css?1650523828" rel="stylesheet">
     
-    <link href="../../css/theme-red.css?1646409792" rel="stylesheet">
+    <link href="../../css/theme-red.css?1650523828" rel="stylesheet">
     
-    <link href="../../css/foo.css?1646409792" rel="stylesheet"><link href="../../css/bar.css?1646409792" rel="stylesheet">
+    <link href="../../css/foo.css?1650523828" rel="stylesheet"><link href="../../css/bar.css?1650523828" rel="stylesheet">
 
-    <script src="../../js/jquery-3.3.1.min.js?1646409792"></script>
+    <script src="../../js/jquery-3.3.1.min.js?1650523828"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -273,8 +273,10 @@ metacore &lt;- metacore %&gt;%
 <pre class="r"><code>build_from_derived(metacore, list(), predecessor_only = FALSE)</code></pre>
 <pre><code>## Error in build_from_derived(metacore, list(), predecessor_only = FALSE): Not all datasets provided. Please pass the following dataset(s):
 ## DM</code></pre>
-<p>In this case all the columns come from <code>DM</code> so that is the only dataset I will pass into <code>build_from_derived</code>. The result is all the columns are combined to make a new dataset and any columns that need renaming between SDTM and ADAM are renamed.</p>
-<pre class="r"><code>adsl_preds &lt;- build_from_derived(metacore, list(&quot;dm&quot; = sdtm_dm), predecessor_only = FALSE, keep = TRUE)
+<p>In this case all the columns come from <code>DM</code> so that is the only dataset I will pass into <code>build_from_derived</code>. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADAM are renamed.</p>
+<pre class="r"><code>adsl_preds &lt;- build_from_derived(metacore, 
+                                 ds_list = list(&quot;dm&quot; = sdtm_dm), 
+                                 predecessor_only = FALSE, keep = TRUE)
 head(adsl_preds)</code></pre>
 <pre><code>##        STUDYID     USUBJID SUBJID SITEID                  ARM AGE  AGEU  RACE
 ## 1 CDISCPILOT01 01-701-1015   1015    701              Placebo  63 YEARS WHITE
@@ -290,9 +292,19 @@ head(adsl_preds)</code></pre>
 ## 4   M NOT HISPANIC OR LATINO  &lt;NA&gt; 2014-03-18 2014-04-14  Xanomeline Low Dose
 ## 5   F NOT HISPANIC OR LATINO  &lt;NA&gt; 2014-07-01 2014-12-30 Xanomeline High Dose
 ## 6   F NOT HISPANIC OR LATINO  &lt;NA&gt; 2013-02-12 2013-03-29              Placebo</code></pre>
-<p>Now we have the base dataset, we can start to create the variable decodes and groups using thr control terminology.</p>
+<p>Now we have the base dataset, we can start to create some variables. I am going to start with creating the subgroups using the control terminology, in this case AGEGR1. The metacore object holds all the metadata needed to make ADSL. Part of that metadat is the control terminology, which can help automate the creation of subgroups. We can look into the metacore object and see the control terminology for AGRGR1.</p>
+<pre class="r"><code>get_control_term(metacore, variable = AGEGR1)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   code  decode
+##   &lt;chr&gt; &lt;chr&gt; 
+## 1 &lt;65   &lt;65   
+## 2 65-80 65-80 
+## 3 &gt;80   &gt;80</code></pre>
+<p>Because this control terminology is written in a fairly standard format we can automate the creation of AGEGR1. The {metatools} function <code>create_cat_var</code> takes in a metacore object, a reference variable, in this case AGE because the is the continues variable AGEGR1 created from, and the name of the sub-grouped variable. It will take the control terminology from the sub-grouped variable and cut the reference variables accordingly.</p>
+<p>Using a similar philosophy we can create the numeric version of RACE and TRT01P using the control terminology stored in the metacore object with the <code>create_var_from_codelist</code> function in {metatools}</p>
 <pre class="r"><code>adsl_ct &lt;- adsl_preds %&gt;% 
-   create_cat_var(metacore, AGE, AGEGR1, AGEGR1N) %&gt;% 
+   create_cat_var(metacore, ref_var = AGE, 
+                  grp_var = AGEGR1, num_grp_var = AGEGR1N) %&gt;% 
    create_var_from_codelist(metacore, RACE, RACEN) %&gt;% 
    create_var_from_codelist(metacore, TRT01P, TRT01PN) %&gt;% 
    mutate(
@@ -301,18 +313,20 @@ head(adsl_preds)</code></pre>
       TRT01A = TRT01P,
       TRT01AN = TRT01PN,
       ITTFL = if_else(!is.na(ARM) &amp; ARM != &quot;Screen Failure&quot;, &quot;Y&quot;, &quot;N&quot;))</code></pre>
+<p>Now we have sorted out what we can we easily do with control terminology it is time to start coding up some variables. We are going to start with the exposure variables. We need to get the start and end of treatment as well as the treatment duration, the cumulative and the average dose.</p>
 <pre class="r"><code>adsl_dates &lt;- adsl_ct %&gt;%
    derive_var_trtsdtm(dataset_ex = sdtm_ex) %&gt;% # Derive Datetime of First Exposure to Treatment
    derive_var_trtedtm(dataset_ex = sdtm_ex) %&gt;% # Derive Datetime of Last Exposure to Treatment
    derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %&gt;%  #Convert Datetime variables to date 
-   mutate(TRTDURD = as.numeric(TRTEDT - TRTSDT) + 1,
-          CUMDOSE = TRT01PN * TRTDURD,
+   derive_var_trtdurd() %&gt;% 
+   mutate(TRTDURD = as.numeric(TRTEDT - TRTSDT) + 1, #derive_var_trtdurd
+          CUMDOSE = TRT01PN * TRTDURD, # switch to admiral 
           AVGDD = CUMDOSE/TRTDURD,
           SAFFL = if_else(ITTFL == &quot;Y&quot; &amp; !is.na(TRTSDT), &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
    drop_unspec_vars(metacore)</code></pre>
 <pre class="r"><code>adsl_dispo &lt;- adsl_dates %&gt;% 
    # Derive a Disposition Status 
-   derive_disposition_status(
+   derive_var_disposition_status(
       dataset_ds = sdtm_ds,
       new_var = EOSSTT,
       status_var = DSDECOD,
@@ -344,10 +358,6 @@ head(adsl_preds)</code></pre>
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <pre><code>## Warning: `derive_disposition_reason()` was deprecated in admiral 0.6.0.
 ## Please use `derive_vars_disposition_reason()` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre><code>## Warning: `derive_disposition_status()` was deprecated in admiral 0.6.0.
-## Please use `derive_var_disposition_status()` instead.
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <pre class="r"><code># Get end of treatment visit 
@@ -566,16 +576,16 @@ adsl_raw %&gt;%
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="../../js/clipboard.min.js?1646409792"></script>
-    <script src="../../js/perfect-scrollbar.min.js?1646409792"></script>
-    <script src="../../js/perfect-scrollbar.jquery.min.js?1646409792"></script>
-    <script src="../../js/jquery.sticky.js?1646409792"></script>
-    <script src="../../js/featherlight.min.js?1646409792"></script>
-    <script src="../../js/highlight.pack.js?1646409792"></script>
+    <script src="../../js/clipboard.min.js?1650523828"></script>
+    <script src="../../js/perfect-scrollbar.min.js?1650523828"></script>
+    <script src="../../js/perfect-scrollbar.jquery.min.js?1650523828"></script>
+    <script src="../../js/jquery.sticky.js?1650523828"></script>
+    <script src="../../js/featherlight.min.js?1650523828"></script>
+    <script src="../../js/highlight.pack.js?1650523828"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="../../js/modernizr.custom-3.6.0.js?1646409792"></script>
-    <script src="../../js/learn.js?1646409792"></script>
-    <script src="../../js/hugo-learn.js?1646409792"></script>
+    <script src="../../js/modernizr.custom-3.6.0.js?1650523828"></script>
+    <script src="../../js/learn.js?1650523828"></script>
+    <script src="../../js/hugo-learn.js?1650523828"></script>
     
         
             <script src="https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"></script>
