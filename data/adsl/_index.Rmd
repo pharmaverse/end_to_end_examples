@@ -65,6 +65,11 @@ Because this control terminology is written in a fairly standard format we can a
 Using a similar philosophy we can create the numeric version of RACE and TRT01P using the control terminology stored in the metacore object with the `create_var_from_codelist` function in {metatools}
 
 ```{r ct}
+adsl_preds %>% 
+   create_cat_var(metacore, ref_var = AGE, 
+                  grp_var = AGEGR1, num_grp_var = AGEGR1N) %>% 
+   select(AGE, AGEGR1, AGEGR1N)
+
 adsl_ct <- adsl_preds %>% 
    create_cat_var(metacore, ref_var = AGE, 
                   grp_var = AGEGR1, num_grp_var = AGEGR1N) %>% 
@@ -106,14 +111,14 @@ adsl_dispo <- adsl_dates %>%
       filter = DSCAT == "DISPOSITION EVENT"
    ) %>%
    # Derive a Disposition Reason
-   derive_disposition_reason(
+   derive_vars_disposition_reason(
       dataset_ds = sdtm_ds,
       new_var = DCSREAS,
       reason_var = DSDECOD,
       filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
    ) %>% 
    # Derived Disposition Date 
-   derive_disposition_dt(
+   derive_var_disposition_dt(
       dataset_ds = sdtm_ds,
       new_var = RFENDT,
       dtc = DSSTDTC,
@@ -168,12 +173,13 @@ adsl_bmi <- left_join(adsl_dispo, bmis, by = "USUBJID")
 
 completer_cal <- function(.data, wk_num, sv){
    new_col <- paste0("COMP", wk_num, "FL") %>% sym()
+
    sv %>% 
       group_by(USUBJID) %>% 
       filter(VISIT == paste("WEEK", wk_num)) %>% 
       select(USUBJID, SVSTDTC) %>% 
       left_join(.data, . , by = "USUBJID") %>% 
-      mutate({{new_col }}:= if_else(!is.na(SVSTDTC) && TRTEDT >= SVSTDTC, "Y", "N")) %>% 
+      mutate({{new_col }}:= ifelse(!is.na(SVSTDTC) && TRTEDT >= SVSTDTC, "Y", "N")) %>% 
       select(-SVSTDTC)
 }
 

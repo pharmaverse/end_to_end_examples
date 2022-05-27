@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.97.3" />
+    <meta name="generator" content="Hugo 0.99.1" />
     <meta name="description" content="An example of how to generate an ADSL dataset from STDM">
 
 
@@ -12,22 +12,22 @@
     <title>Create ADSL - pharmaverse examples</title>
 
     
-    <link href="../../css/nucleus.css?1650523828" rel="stylesheet">
-    <link href="../../css/fontawesome-all.min.css?1650523828" rel="stylesheet">
-    <link href="../../css/hybrid.css?1650523828" rel="stylesheet">
-    <link href="../../css/featherlight.min.css?1650523828" rel="stylesheet">
-    <link href="../../css/perfect-scrollbar.min.css?1650523828" rel="stylesheet">
-    <link href="../../css/auto-complete.css?1650523828" rel="stylesheet">
-    <link href="../../css/atom-one-dark-reasonable.css?1650523828" rel="stylesheet">
-    <link href="../../css/theme.css?1650523828" rel="stylesheet">
-    <link href="../../css/tabs.css?1650523828" rel="stylesheet">
-    <link href="../../css/hugo-theme.css?1650523828" rel="stylesheet">
+    <link href="../../css/nucleus.css?1653646545" rel="stylesheet">
+    <link href="../../css/fontawesome-all.min.css?1653646545" rel="stylesheet">
+    <link href="../../css/hybrid.css?1653646545" rel="stylesheet">
+    <link href="../../css/featherlight.min.css?1653646545" rel="stylesheet">
+    <link href="../../css/perfect-scrollbar.min.css?1653646545" rel="stylesheet">
+    <link href="../../css/auto-complete.css?1653646545" rel="stylesheet">
+    <link href="../../css/atom-one-dark-reasonable.css?1653646545" rel="stylesheet">
+    <link href="../../css/theme.css?1653646545" rel="stylesheet">
+    <link href="../../css/tabs.css?1653646545" rel="stylesheet">
+    <link href="../../css/hugo-theme.css?1653646545" rel="stylesheet">
     
-    <link href="../../css/theme-red.css?1650523828" rel="stylesheet">
+    <link href="../../css/theme-red.css?1653646545" rel="stylesheet">
     
-    <link href="../../css/foo.css?1650523828" rel="stylesheet"><link href="../../css/bar.css?1650523828" rel="stylesheet">
+    <link href="../../css/foo.css?1653646545" rel="stylesheet"><link href="../../css/bar.css?1653646545" rel="stylesheet">
 
-    <script src="../../js/jquery-3.3.1.min.js?1650523828"></script>
+    <script src="../../js/jquery-3.3.1.min.js?1653646545"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -302,6 +302,317 @@ head(adsl_preds)</code></pre>
 ## 3 &gt;80   &gt;80</code></pre>
 <p>Because this control terminology is written in a fairly standard format we can automate the creation of AGEGR1. The {metatools} function <code>create_cat_var</code> takes in a metacore object, a reference variable, in this case AGE because the is the continues variable AGEGR1 created from, and the name of the sub-grouped variable. It will take the control terminology from the sub-grouped variable and cut the reference variables accordingly.</p>
 <p>Using a similar philosophy we can create the numeric version of RACE and TRT01P using the control terminology stored in the metacore object with the <code>create_var_from_codelist</code> function in {metatools}</p>
+<pre class="r"><code>adsl_preds %&gt;% 
+   create_cat_var(metacore, ref_var = AGE, 
+                  grp_var = AGEGR1, num_grp_var = AGEGR1N) %&gt;% 
+   select(AGE, AGEGR1, AGEGR1N)</code></pre>
+<pre><code>##     AGE AGEGR1 AGEGR1N
+## 1    63    &lt;65       1
+## 2    64    &lt;65       1
+## 3    71  65-80       2
+## 4    74  65-80       2
+## 5    77  65-80       2
+## 6    85    &gt;80       3
+## 7    59    &lt;65       1
+## 8    68  65-80       2
+## 9    81    &gt;80       3
+## 10   84    &gt;80       3
+## 11   52    &lt;65       1
+## 12   84    &gt;80       3
+## 13   81    &gt;80       3
+## 14   57    &lt;65       1
+## 15   75  65-80       2
+## 16   57    &lt;65       1
+## 17   79  65-80       2
+## 18   82    &gt;80       3
+## 19   62    &lt;65       1
+## 20   56    &lt;65       1
+## 21   79  65-80       2
+## 22   71  65-80       2
+## 23   80  65-80       2
+## 24   81    &gt;80       3
+## 25   76  65-80       2
+## 26   69  65-80       2
+## 27   56    &lt;65       1
+## 28   57    &lt;65       1
+## 29   61    &lt;65       1
+## 30   56    &lt;65       1
+## 31   67  65-80       2
+## 32   61    &lt;65       1
+## 33   80  65-80       2
+## 34   68  65-80       2
+## 35   79  65-80       2
+## 36   51    &lt;65       1
+## 37   63    &lt;65       1
+## 38   54    &lt;65       1
+## 39   67  65-80       2
+## 40   81    &gt;80       3
+## 41   74  65-80       2
+## 42   72  65-80       2
+## 43   71  65-80       2
+## 44   87    &gt;80       3
+## 45   78  65-80       2
+## 46   76  65-80       2
+## 47   85    &gt;80       3
+## 48   84    &gt;80       3
+## 49   70  65-80       2
+## 50   57    &lt;65       1
+## 51   63    &lt;65       1
+## 52   84    &gt;80       3
+## 53   64    &lt;65       1
+## 54   69  65-80       2
+## 55   71  65-80       2
+## 56   81    &gt;80       3
+## 57   84    &gt;80       3
+## 58   81    &gt;80       3
+## 59   75  65-80       2
+## 60   84    &gt;80       3
+## 61   76  65-80       2
+## 62   72  65-80       2
+## 63   78  65-80       2
+## 64   72  65-80       2
+## 65   88    &gt;80       3
+## 66   81    &gt;80       3
+## 67   67  65-80       2
+## 68   81    &gt;80       3
+## 69   84    &gt;80       3
+## 70   67  65-80       2
+## 71   76  65-80       2
+## 72   76  65-80       2
+## 73   83    &gt;80       3
+## 74   80  65-80       2
+## 75   77  65-80       2
+## 76   81    &gt;80       3
+## 77   75  65-80       2
+## 78   80  65-80       2
+## 79   79  65-80       2
+## 80   77  65-80       2
+## 81   71  65-80       2
+## 82   84    &gt;80       3
+## 83   74  65-80       2
+## 84   67  65-80       2
+## 85   81    &gt;80       3
+## 86   87    &gt;80       3
+## 87   86    &gt;80       3
+## 88   71  65-80       2
+## 89   82    &gt;80       3
+## 90   68  65-80       2
+## 91   81    &gt;80       3
+## 92   80  65-80       2
+## 93   70  65-80       2
+## 94   81    &gt;80       3
+## 95   74  65-80       2
+## 96   75  65-80       2
+## 97   75  65-80       2
+## 98   69  65-80       2
+## 99   56    &lt;65       1
+## 100  89    &gt;80       3
+## 101  66  65-80       2
+## 102  78  65-80       2
+## 103  84    &gt;80       3
+## 104  87    &gt;80       3
+## 105  70  65-80       2
+## 106  56    &lt;65       1
+## 107  73  65-80       2
+## 108  70  65-80       2
+## 109  60    &lt;65       1
+## 110  72  65-80       2
+## 111  74  65-80       2
+## 112  86    &gt;80       3
+## 113  63    &lt;65       1
+## 114  82    &gt;80       3
+## 115  84    &gt;80       3
+## 116  87    &gt;80       3
+## 117  68  65-80       2
+## 118  64    &lt;65       1
+## 119  60    &lt;65       1
+## 120  74  65-80       2
+## 121  72  65-80       2
+## 122  65  65-80       2
+## 123  72  65-80       2
+## 124  81    &gt;80       3
+## 125  76  65-80       2
+## 126  80  65-80       2
+## 127  68  65-80       2
+## 128  62    &lt;65       1
+## 129  73  65-80       2
+## 130  88    &gt;80       3
+## 131  73  65-80       2
+## 132  74  65-80       2
+## 133  78  65-80       2
+## 134  81    &gt;80       3
+## 135  77  65-80       2
+## 136  77  65-80       2
+## 137  70  65-80       2
+## 138  76  65-80       2
+## 139  78  65-80       2
+## 140  86    &gt;80       3
+## 141  80  65-80       2
+## 142  61    &lt;65       1
+## 143  82    &gt;80       3
+## 144  80  65-80       2
+## 145  57    &lt;65       1
+## 146  61    &lt;65       1
+## 147  74  65-80       2
+## 148  73  65-80       2
+## 149  59    &lt;65       1
+## 150  61    &lt;65       1
+## 151  79  65-80       2
+## 152  87    &gt;80       3
+## 153  87    &gt;80       3
+## 154  84    &gt;80       3
+## 155  67  65-80       2
+## 156  71  65-80       2
+## 157  84    &gt;80       3
+## 158  76  65-80       2
+## 159  54    &lt;65       1
+## 160  72  65-80       2
+## 161  82    &gt;80       3
+## 162  86    &gt;80       3
+## 163  69  65-80       2
+## 164  79  65-80       2
+## 165  71  65-80       2
+## 166  72  65-80       2
+## 167  77  65-80       2
+## 168  84    &gt;80       3
+## 169  88    &gt;80       3
+## 170  69  65-80       2
+## 171  82    &gt;80       3
+## 172  87    &gt;80       3
+## 173  62    &lt;65       1
+## 174  60    &lt;65       1
+## 175  65  65-80       2
+## 176  68  65-80       2
+## 177  75  65-80       2
+## 178  70  65-80       2
+## 179  81    &gt;80       3
+## 180  77  65-80       2
+## 181  88    &gt;80       3
+## 182  77  65-80       2
+## 183  79  65-80       2
+## 184  83    &gt;80       3
+## 185  83    &gt;80       3
+## 186  84    &gt;80       3
+## 187  82    &gt;80       3
+## 188  85    &gt;80       3
+## 189  76  65-80       2
+## 190  81    &gt;80       3
+## 191  89    &gt;80       3
+## 192  69  65-80       2
+## 193  79  65-80       2
+## 194  76  65-80       2
+## 195  79  65-80       2
+## 196  84    &gt;80       3
+## 197  81    &gt;80       3
+## 198  80  65-80       2
+## 199  78  65-80       2
+## 200  56    &lt;65       1
+## 201  79  65-80       2
+## 202  85    &gt;80       3
+## 203  78  65-80       2
+## 204  83    &gt;80       3
+## 205  86    &gt;80       3
+## 206  81    &gt;80       3
+## 207  78  65-80       2
+## 208  78  65-80       2
+## 209  83    &gt;80       3
+## 210  73  65-80       2
+## 211  73  65-80       2
+## 212  82    &gt;80       3
+## 213  88    &gt;80       3
+## 214  89    &gt;80       3
+## 215  80  65-80       2
+## 216  77  65-80       2
+## 217  80  65-80       2
+## 218  88    &gt;80       3
+## 219  67  65-80       2
+## 220  86    &gt;80       3
+## 221  70  65-80       2
+## 222  76  65-80       2
+## 223  74  65-80       2
+## 224  62    &lt;65       1
+## 225  74  65-80       2
+## 226  82    &gt;80       3
+## 227  75  65-80       2
+## 228  77  65-80       2
+## 229  61    &lt;65       1
+## 230  84    &gt;80       3
+## 231  78  65-80       2
+## 232  74  65-80       2
+## 233  74  65-80       2
+## 234  79  65-80       2
+## 235  64    &lt;65       1
+## 236  77  65-80       2
+## 237  71  65-80       2
+## 238  73  65-80       2
+## 239  71  65-80       2
+## 240  88    &gt;80       3
+## 241  79  65-80       2
+## 242  75  65-80       2
+## 243  77  65-80       2
+## 244  78  65-80       2
+## 245  81    &gt;80       3
+## 246  77  65-80       2
+## 247  65  65-80       2
+## 248  50    &lt;65       1
+## 249  59    &lt;65       1
+## 250  78  65-80       2
+## 251  77  65-80       2
+## 252  65  65-80       2
+## 253  75  65-80       2
+## 254  75  65-80       2
+## 255  76  65-80       2
+## 256  69  65-80       2
+## 257  73  65-80       2
+## 258  79  65-80       2
+## 259  87    &gt;80       3
+## 260  73  65-80       2
+## 261  83    &gt;80       3
+## 262  74  65-80       2
+## 263  81    &gt;80       3
+## 264  80  65-80       2
+## 265  78  65-80       2
+## 266  82    &gt;80       3
+## 267  79  65-80       2
+## 268  86    &gt;80       3
+## 269  83    &gt;80       3
+## 270  85    &gt;80       3
+## 271  83    &gt;80       3
+## 272  68  65-80       2
+## 273  72  65-80       2
+## 274  81    &gt;80       3
+## 275  73  65-80       2
+## 276  72  65-80       2
+## 277  76  65-80       2
+## 278  73  65-80       2
+## 279  76  65-80       2
+## 280  78  65-80       2
+## 281  59    &lt;65       1
+## 282  84    &gt;80       3
+## 283  74  65-80       2
+## 284  80  65-80       2
+## 285  85    &gt;80       3
+## 286  72  65-80       2
+## 287  80  65-80       2
+## 288  84    &gt;80       3
+## 289  73  65-80       2
+## 290  85    &gt;80       3
+## 291  64    &lt;65       1
+## 292  77  65-80       2
+## 293  75  65-80       2
+## 294  79  65-80       2
+## 295  67  65-80       2
+## 296  82    &gt;80       3
+## 297  77  65-80       2
+## 298  73  65-80       2
+## 299  80  65-80       2
+## 300  74  65-80       2
+## 301  82    &gt;80       3
+## 302  78  65-80       2
+## 303  86    &gt;80       3
+## 304  79  65-80       2
+## 305  69  65-80       2
+## 306  74  65-80       2</code></pre>
 <pre class="r"><code>adsl_ct &lt;- adsl_preds %&gt;% 
    create_cat_var(metacore, ref_var = AGE, 
                   grp_var = AGEGR1, num_grp_var = AGEGR1N) %&gt;% 
@@ -333,14 +644,14 @@ head(adsl_preds)</code></pre>
       filter = DSCAT == &quot;DISPOSITION EVENT&quot;
    ) %&gt;%
    # Derive a Disposition Reason
-   derive_disposition_reason(
+   derive_vars_disposition_reason(
       dataset_ds = sdtm_ds,
       new_var = DCSREAS,
       reason_var = DSDECOD,
       filter = DSCAT == &quot;DISPOSITION EVENT&quot; &amp; DSDECOD != &quot;SCREEN FAILURE&quot;
    ) %&gt;% 
    # Derived Disposition Date 
-   derive_disposition_dt(
+   derive_var_disposition_dt(
       dataset_ds = sdtm_ds,
       new_var = RFENDT,
       dtc = DSSTDTC,
@@ -351,16 +662,9 @@ head(adsl_preds)</code></pre>
    # Creating disposition flags 
    mutate(
       DISCONFL = if_else(DCDECOD != &quot;COMPLETED&quot;, &quot;Y&quot;, NA_character_),
-      DSRAEFL = if_else(DCDECOD != &quot;ADVERSE EVENT&quot;, &quot;Y&quot;, NA_character_))</code></pre>
-<pre><code>## Warning: `derive_disposition_dt()` was deprecated in admiral 0.6.0.
-## Please use `derive_var_disposition_dt()` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre><code>## Warning: `derive_disposition_reason()` was deprecated in admiral 0.6.0.
-## Please use `derive_vars_disposition_reason()` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre class="r"><code># Get end of treatment visit 
+      DSRAEFL = if_else(DCDECOD != &quot;ADVERSE EVENT&quot;, &quot;Y&quot;, NA_character_))
+
+# Get end of treatment visit 
 adsl_dispo &lt;- sdtm_ds %&gt;% 
    filter(DSTERM ==&#39;PROTOCOL COMPLETED&#39;) %&gt;% 
    mutate(VISNUMEN = if_else(VISITNUM == 13, 12, VISITNUM)) %&gt;% 
@@ -404,12 +708,13 @@ bmis </code></pre>
 <h2>Apply Codelists</h2>
 <pre class="r"><code>completer_cal &lt;- function(.data, wk_num, sv){
    new_col &lt;- paste0(&quot;COMP&quot;, wk_num, &quot;FL&quot;) %&gt;% sym()
+
    sv %&gt;% 
       group_by(USUBJID) %&gt;% 
       filter(VISIT == paste(&quot;WEEK&quot;, wk_num)) %&gt;% 
       select(USUBJID, SVSTDTC) %&gt;% 
       left_join(.data, . , by = &quot;USUBJID&quot;) %&gt;% 
-      mutate({{new_col }}:= if_else(!is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC, &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
+      mutate({{new_col }}:= ifelse(!is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC, &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
       select(-SVSTDTC)
 }
 
@@ -423,6 +728,23 @@ adsl_fls &lt;- adsl_bmi %&gt;%
    completer_cal(16, sdtm_sv) %&gt;% 
    completer_cal(24, sdtm_sv) %&gt;% 
    left_join(first_visit, by= &quot;USUBJID&quot;)</code></pre>
+<pre><code>## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
+## coercion to &#39;logical(1)&#39;
+
+## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
+## coercion to &#39;logical(1)&#39;
+
+## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
+## coercion to &#39;logical(1)&#39;
+
+## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
+## coercion to &#39;logical(1)&#39;
+
+## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
+## coercion to &#39;logical(1)&#39;
+
+## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
+## coercion to &#39;logical(1)&#39;</code></pre>
 <pre class="r"><code>adsl_ed &lt;- sdtm_sc %&gt;% 
    filter(SCTESTCD == &quot;EDLEVEL&quot;) %&gt;% 
    select(USUBJID, SCSTRESN) %&gt;% 
@@ -576,16 +898,16 @@ adsl_raw %&gt;%
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="../../js/clipboard.min.js?1650523828"></script>
-    <script src="../../js/perfect-scrollbar.min.js?1650523828"></script>
-    <script src="../../js/perfect-scrollbar.jquery.min.js?1650523828"></script>
-    <script src="../../js/jquery.sticky.js?1650523828"></script>
-    <script src="../../js/featherlight.min.js?1650523828"></script>
-    <script src="../../js/highlight.pack.js?1650523828"></script>
+    <script src="../../js/clipboard.min.js?1653646545"></script>
+    <script src="../../js/perfect-scrollbar.min.js?1653646545"></script>
+    <script src="../../js/perfect-scrollbar.jquery.min.js?1653646545"></script>
+    <script src="../../js/jquery.sticky.js?1653646545"></script>
+    <script src="../../js/featherlight.min.js?1653646545"></script>
+    <script src="../../js/highlight.pack.js?1653646545"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="../../js/modernizr.custom-3.6.0.js?1650523828"></script>
-    <script src="../../js/learn.js?1650523828"></script>
-    <script src="../../js/hugo-learn.js?1650523828"></script>
+    <script src="../../js/modernizr.custom-3.6.0.js?1653646545"></script>
+    <script src="../../js/learn.js?1653646545"></script>
+    <script src="../../js/hugo-learn.js?1653646545"></script>
     
         
             <script src="https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"></script>
