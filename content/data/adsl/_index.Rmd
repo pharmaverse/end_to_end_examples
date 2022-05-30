@@ -35,8 +35,8 @@ library(lubridate)
 library(stringr)
 
 # Read in input SDTM data 
-data("sdtm_dm")
-data("sdtm_ex")
+data("admiral_dm")
+data("admiral_ex")
 
 # Read in metacore object 
 load(metacore_example("pilot_ADaM.rda"))
@@ -56,7 +56,7 @@ In this case all the columns come from `DM` so that is the only dataset I will p
 
 ```{r demographcis}
 adsl_preds <- build_from_derived(metacore, 
-                                 ds_list = list("dm" = sdtm_dm), 
+                                 ds_list = list("dm" = admiral_dm), 
                                  predecessor_only = FALSE, keep = TRUE)
 head(adsl_preds)
 ```
@@ -92,7 +92,7 @@ We derive the start and end of treatment, the treatment duration, and the safety
 ```{r exposure}
 adsl_raw <- adsl_ct %>%
   derive_vars_merged_dtm(
-    dataset_add = sdtm_ex,
+    dataset_add = admiral_ex,
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10,
@@ -103,7 +103,7 @@ adsl_raw <- adsl_ct %>%
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
   derive_vars_merged_dtm(
-    dataset_add = sdtm_ex,
+    dataset_add = admiral_ex,
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10,
@@ -117,7 +117,7 @@ adsl_raw <- adsl_ct %>%
    derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%  #Convert Datetime variables to date 
    derive_var_trtdurd() %>% 
    derive_var_merged_exist_flag(
-     dataset_add = sdtm_ex,
+     dataset_add = admiral_ex,
      by_vars = vars(STUDYID, USUBJID),
      new_var = SAFFL,
      condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
