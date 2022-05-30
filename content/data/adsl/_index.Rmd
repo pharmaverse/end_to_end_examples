@@ -6,18 +6,20 @@ output: html_document
 description: "An example of how to generate an ADSL dataset from STDM"
 ---
 
-## Intro
+## Introduction
 
-This guide will show you how four pharmaverse packages, along with some from tidyverse, can be used to create an ADaM such as `ADSL` end-to-end.
+This guide will show you how four pharmaverse packages, along with some from tidyverse, can be used to create an ADaM such as `ADSL` end-to-end, using the pilot CDISC SDTM data as input.
+
 The four packages used with a brief description of their purpose are as follows:
-- `{metacore}`: provides harmonized metadata/specifications object.
-- `{metatools}`: uses the provided metadata to build/enhance and check the dataset.
-- `{admiral}`: provides the ADaM derivations.
-- `{xportr}`: delivers the SAS transport file (XPT) and eSub checks.
+
+* `{metacore}`: provides harmonized metadata/specifications object.
+* `{metatools}`: uses the provided metadata to build/enhance and check the dataset.
+* `{admiral}`: provides the ADaM derivations.
+* `{xportr}`: delivers the SAS transport file (XPT) and eSub checks.
 
 ## Load Data and Required pharmaverse Packages
 
-The first step is to load our pharmaverse packages and data. Here we are trying to create an ADSL dataset using the pilot CDISC data.
+The first step is to load our pharmaverse packages and input data.
 
 ```{r setup, warning=FALSE, results='hold'}
 options(repos = c(
@@ -37,7 +39,11 @@ library(stringr)
 # Read in input SDTM data 
 data("admiral_dm")
 data("admiral_ex")
+```
 
+Next we need to load the specification file in the form of a `{metacore}` object.
+
+```{r metacore, warning=FALSE, results='hold'}
 # Read in metacore object 
 load(metacore_example("pilot_ADaM.rda"))
 metacore <- metacore %>% 
@@ -46,13 +52,13 @@ metacore <- metacore %>%
 
 ## Start Building Derivations
 
-The first thing we are going to do is pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don't you can call `build_from_derived` with just an empty list and the error will tell you which datasets you need to supply. 
+The first derivation step we are going to do is to pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don't you can call `build_from_derived` with just an empty list and the error will tell you which datasets you need to supply. 
 
 ```{r, error=TRUE}
 build_from_derived(metacore, list(), predecessor_only = FALSE)
 ```
 
-In this case all the columns come from `DM` so that is the only dataset I will pass into `build_from_derived`. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADaM are renamed.
+In this case all the columns come from `DM` so that is the only dataset we will pass into `build_from_derived`. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADaM are renamed.
 
 ```{r demographcis}
 adsl_preds <- build_from_derived(metacore, 
@@ -61,7 +67,7 @@ adsl_preds <- build_from_derived(metacore,
 head(adsl_preds)
 ```
 
-Now we have the base dataset, we can start to create some variables. I am going to start with creating the subgroups using the controlled terminology, in this case `AGEGR1`. The metacore object holds all the metadata needed to make `ADSL`. Part of that metadata is the controlled terminology, which can help automate the creation of subgroups. We can look into the `{metacore}` object and see the controlled terminology for `AGEGR1`.
+Now we have the base dataset, we can start to create some variables. We can start with creating the subgroups using the controlled terminology, in this case `AGEGR1`. The metacore object holds all the metadata needed to make `ADSL`. Part of that metadata is the controlled terminology, which can help automate the creation of subgroups. We can look into the `{metacore}` object and see the controlled terminology for `AGEGR1`.
 
 ```{r}
 get_control_term(metacore, variable = AGEGR1)
@@ -128,7 +134,7 @@ adsl_raw <- adsl_ct %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl_raw,
-  display_vars = vars(USUBJID, TRTSDTM, TRTSDT, TRTEDTM, TRTEDT, TRTDURD, SAFFL)
+  display_vars = vars(USUBJID, TRTSDT, TRTEDT, TRTDURD, SAFFL)
 )
 ```
 
