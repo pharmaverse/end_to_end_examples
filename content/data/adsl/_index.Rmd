@@ -49,7 +49,7 @@ load(metacore_example("pilot_ADaM.rda"))
 metacore <- metacore %>% 
    select_dataset("ADSL")
 ```
-
+  
 ## Start Building Derivations
 
 The first derivation step we are going to do is to pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don't you can call `build_from_derived` with just an empty list and the error will tell you which datasets you need to supply. 
@@ -82,13 +82,8 @@ adsl_ct <- adsl_preds %>%
    create_cat_var(metacore, ref_var = AGE, 
                   grp_var = AGEGR1, num_grp_var = AGEGR1N) %>% 
    create_var_from_codelist(metacore, RACE, RACEN)
-```
 
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  adsl_ct,
-  display_vars = vars(USUBJID, AGE, AGEGR1, AGEGR1N, RACE, RACEN)
-)
+head(adsl_ct)
 ```
 
 Now we have sorted out what we can easily do with controlled terminology it is time to start deriving some variables.
@@ -129,13 +124,44 @@ adsl_raw <- adsl_ct %>%
      condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
    ) %>% 
    drop_unspec_vars(metacore) #This will drop any columns that aren't specificed in the metacore object
+
+head(adsl_raw)
 ```
 
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  adsl_raw,
-  display_vars = vars(USUBJID, TRTSDT, TRTEDT, TRTDURD, SAFFL)
-)
+```{r, warning=FALSE, message=FALSE, include=FALSE}
+# Create dummy variables to match metacore specs to avoid later errors
+# In practice these would be mainly created using derivation functions from admiral
+adsl_raw <- adsl_raw %>%
+  mutate(
+    SITEGR1 = NA,
+    TRT01PN = NA,
+    TRT01A = NA,
+    TRT01AN = NA,
+    AVGDD = NA,
+    CUMDOSE = NA,
+    ITTFL = NA,
+    EFFFL = NA,
+    COMP8FL = NA,
+    COMP16FL = NA,
+    COMP24FL = NA,
+    DISCONFL = NA,
+    DSRAEFL = NA,
+    BMIBL = NA,
+    BMIBLGR1 = NA,
+    HEIGHTBL = NA,
+    WEIGHTBL = NA,
+    EDUCLVL = NA,
+    DISONSDT = NA,
+    DURDIS = NA,
+    DURDSGR1 = NA,
+    VISIT1DT = NA,
+    VISNUMEN = NA,
+    RFENDT = NA,
+    DCDECOD = NA,
+    EOSSTT = NA,
+    DCSREAS = NA,
+    MMSETOT = NA
+  )
 ```
 
 ## Apply Metadata to Create an eSub XPT and Perform Associated Checks
