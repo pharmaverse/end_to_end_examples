@@ -81,7 +81,9 @@ Using a similar philosophy we can create the numeric version of `RACE` using the
 adsl_ct <- adsl_preds %>% 
    create_cat_var(metacore, ref_var = AGE, 
                   grp_var = AGEGR1, num_grp_var = AGEGR1N) %>% 
-   create_var_from_codelist(metacore, RACE, RACEN)
+   create_var_from_codelist(metacore = metacore, 
+                            input_var = RACE, 
+                            out_var = RACEN)
 
 head(adsl_ct)
 ```
@@ -168,16 +170,13 @@ adsl_raw <- adsl_raw %>%
 
 Now we have all the variables defined we can run some checks before applying the necessary formatting. 
 ```{r checks}
-test <- metacore$var_spec %>% 
-   select(variable, type) %>% 
-   mutate(dataset = "ADSL")
 
 adsl_raw %>% 
    check_variables(metacore) %>% # Check all variables specified are present and no more
    check_ct_data(metacore) %>% # Checks all variables with CT only contain values within the CT
    order_cols(metacore) %>% # Orders the columns according to the spec
    sort_by_key(metacore) %>% # Sorts the rows by the sort keys 
-   xportr_type(test) %>% # Coerce variable type to match spec
+   xportr_type(metacore) %>% # Coerce variable type to match spec
    xportr_length(metacore) %>% # Assigns SAS length from a variable level metadata 
    xportr_label(metacore) %>% # Assigns variable label from metacore specifications 
    xportr_df_label(metacore) # Assigns dataset label from metacore specifications
