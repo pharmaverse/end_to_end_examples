@@ -21,7 +21,7 @@ The four packages used with a brief description of their purpose are as follows:
 
 The first step is to load our pharmaverse packages and input data.
 
-```{r setup, warning=FALSE, results='hold'}
+```{r setup, message=FALSE, warning=FALSE, results='hold'}
 options(repos = c(
   pharmaverse = 'https://pharmaverse.r-universe.dev',
   CRAN = 'https://cloud.r-project.org'))
@@ -64,7 +64,7 @@ In this case all the columns come from `DM` so that is the only dataset we will 
 adsl_preds <- build_from_derived(metacore, 
                                  ds_list = list("dm" = admiral_dm), 
                                  predecessor_only = FALSE, keep = TRUE)
-head(adsl_preds)
+head(adsl_preds, n=10)
 ```
 
 Now we have the base dataset, we can start to create some variables. We can start with creating the subgroups using the controlled terminology, in this case `AGEGR1`. The metacore object holds all the metadata needed to make `ADSL`. Part of that metadata is the controlled terminology, which can help automate the creation of subgroups. We can look into the `{metacore}` object and see the controlled terminology for `AGEGR1`.
@@ -85,7 +85,7 @@ adsl_ct <- adsl_preds %>%
                             input_var = RACE, 
                             out_var = RACEN)
 
-head(adsl_ct)
+head(adsl_ct, n=10)
 ```
 
 Now we have sorted out what we can easily do with controlled terminology it is time to start deriving some variables.
@@ -127,7 +127,7 @@ adsl_raw <- adsl_ct %>%
    ) %>% 
    drop_unspec_vars(metacore) #This will drop any columns that aren't specificed in the metacore object
 
-head(adsl_raw)
+head(adsl_raw, n=10)
 ```
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
