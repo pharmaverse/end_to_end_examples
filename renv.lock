@@ -93,14 +93,14 @@
     },
     "admiral": {
       "Package": "admiral",
-      "Version": "0.6.3",
+      "Version": "0.7.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "956270234182e8d9d13ac2863c95fe47"
     },
     "admiral.test": {
       "Package": "admiral.test",
-      "Version": "0.1.2",
+      "Version": "0.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "27b4a6e731d16e349d0e61de38648dbe"
