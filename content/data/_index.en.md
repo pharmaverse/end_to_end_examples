@@ -10,4 +10,6 @@ description: "STDM, ADaM and other data products"
 
 # Data Engineering examples
 
-This section contains examples generating STDM, ADaM and other data derivatives.
+This section will contain examples generating STDM, ADaM and other data derivatives.
+
+Initially we start with one example of how to produce the subject level ADaM (ADSL).
