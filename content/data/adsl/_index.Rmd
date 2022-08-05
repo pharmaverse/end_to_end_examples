@@ -169,7 +169,7 @@ adsl_raw <- adsl_raw %>%
 ## Apply Metadata to Create an eSub XPT and Perform Associated Checks
 
 Now we have all the variables defined we can run some checks before applying the necessary formatting. 
-```{r checks}
+```{r checks, warning=FALSE, message=FALSE}
 
 adsl_raw %>% 
    check_variables(metacore) %>% # Check all variables specified are present and no more
