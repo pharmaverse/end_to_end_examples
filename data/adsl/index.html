@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.99.1" />
+    <meta name="generator" content="Hugo 0.101.0" />
     <meta name="description" content="An example of how to generate an ADSL dataset from STDM">
 
 
@@ -12,22 +12,22 @@
     <title>Create ADSL - pharmaverse examples</title>
 
     
-    <link href="../../css/nucleus.css?1653646545" rel="stylesheet">
-    <link href="../../css/fontawesome-all.min.css?1653646545" rel="stylesheet">
-    <link href="../../css/hybrid.css?1653646545" rel="stylesheet">
-    <link href="../../css/featherlight.min.css?1653646545" rel="stylesheet">
-    <link href="../../css/perfect-scrollbar.min.css?1653646545" rel="stylesheet">
-    <link href="../../css/auto-complete.css?1653646545" rel="stylesheet">
-    <link href="../../css/atom-one-dark-reasonable.css?1653646545" rel="stylesheet">
-    <link href="../../css/theme.css?1653646545" rel="stylesheet">
-    <link href="../../css/tabs.css?1653646545" rel="stylesheet">
-    <link href="../../css/hugo-theme.css?1653646545" rel="stylesheet">
+    <link href="../../css/nucleus.css?1660053563" rel="stylesheet">
+    <link href="../../css/fontawesome-all.min.css?1660053563" rel="stylesheet">
+    <link href="../../css/hybrid.css?1660053563" rel="stylesheet">
+    <link href="../../css/featherlight.min.css?1660053563" rel="stylesheet">
+    <link href="../../css/perfect-scrollbar.min.css?1660053563" rel="stylesheet">
+    <link href="../../css/auto-complete.css?1660053563" rel="stylesheet">
+    <link href="../../css/atom-one-dark-reasonable.css?1660053563" rel="stylesheet">
+    <link href="../../css/theme.css?1660053563" rel="stylesheet">
+    <link href="../../css/tabs.css?1660053563" rel="stylesheet">
+    <link href="../../css/hugo-theme.css?1660053563" rel="stylesheet">
     
-    <link href="../../css/theme-red.css?1653646545" rel="stylesheet">
+    <link href="../../css/theme-red.css?1660053563" rel="stylesheet">
     
-    <link href="../../css/foo.css?1653646545" rel="stylesheet"><link href="../../css/bar.css?1653646545" rel="stylesheet">
+    <link href="../../css/foo.css?1660053563" rel="stylesheet"><link href="../../css/bar.css?1660053563" rel="stylesheet">
 
-    <script src="../../js/jquery-3.3.1.min.js?1653646545"></script>
+    <script src="../../js/jquery-3.3.1.min.js?1660053563"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -103,7 +103,7 @@
   
     
     <li data-nav-id="/data/adsl/" title="Create ADSL" class="dd-item
-        parent
+        
         active
         
         ">
@@ -223,76 +223,69 @@
 	
 
 
-<p>The first step is to load our pharamverse libraries and data. Here we are trying to create an ADSL dataset using the pilot CDISC data.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This guide will show you how four pharmaverse packages, along with some from tidyverse, can be used to create an ADaM such as <code>ADSL</code> end-to-end, using the pilot CDISC SDTM data as input.</p>
+<p>The four packages used with a brief description of their purpose are as follows:</p>
+<ul>
+<li><code>{metacore}</code>: provides harmonized metadata/specifications object.</li>
+<li><code>{metatools}</code>: uses the provided metadata to build/enhance and check the dataset.</li>
+<li><code>{admiral}</code>: provides the ADaM derivations.</li>
+<li><code>{xportr}</code>: delivers the SAS transport file (XPT) and eSub checks.</li>
+</ul>
+</div>
+<div id="load-data-and-required-pharmaverse-packages" class="section level2">
+<h2>Load Data and Required pharmaverse Packages</h2>
+<p>The first step is to load our pharmaverse packages and input data.</p>
 <pre class="r"><code>options(repos = c(
   pharmaverse = &#39;https://pharmaverse.r-universe.dev&#39;,
   CRAN = &#39;https://cloud.r-project.org&#39;))
 
 library(metacore)
 library(metatools)
+library(admiral.test)
 library(admiral)
 library(xportr)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:admiral&#39;:
-## 
-##     filter_if</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(tidyr)
-library(safetyData)
-library(lubridate)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;lubridate&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     date, intersect, setdiff, union</code></pre>
-<pre class="r"><code>library(stringr)
-# Read in data 
-data(&quot;sdtm_dm&quot;)
-data(&quot;sdtm_ds&quot;)
-data(&quot;sdtm_ex&quot;)
-data(&quot;sdtm_vs&quot;)
-data(&quot;sdtm_lb&quot;)
-data(&quot;sdtm_sv&quot;)
-data(&quot;sdtm_sc&quot;)
-data(&quot;sdtm_mh&quot;)
-data(&quot;sdtm_qs&quot;)
-# Read in metacore object 
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+
+# Read in input SDTM data 
+data(&quot;admiral_dm&quot;)
+data(&quot;admiral_ex&quot;)</code></pre>
+<p>Next we need to load the specification file in the form of a <code>{metacore}</code> object.</p>
+<pre class="r"><code># Read in metacore object 
 load(metacore_example(&quot;pilot_ADaM.rda&quot;))
 metacore &lt;- metacore %&gt;% 
    select_dataset(&quot;ADSL&quot;)</code></pre>
-<div id="start-building" class="section level2">
-<h2>Start Building</h2>
-<p>The first thing we are going to do is pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don’t you can call <code>build_from_derived</code> with just an empty list and the error will tell you which datasets you need to supply.</p>
+</div>
+<div id="start-building-derivations" class="section level2">
+<h2>Start Building Derivations</h2>
+<p>The first derivation step we are going to do is to pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don’t you can call <code>build_from_derived</code> with just an empty list and the error will tell you which datasets you need to supply.</p>
 <pre class="r"><code>build_from_derived(metacore, list(), predecessor_only = FALSE)</code></pre>
 <pre><code>## Error in build_from_derived(metacore, list(), predecessor_only = FALSE): Not all datasets provided. Please pass the following dataset(s):
 ## DM</code></pre>
-<p>In this case all the columns come from <code>DM</code> so that is the only dataset I will pass into <code>build_from_derived</code>. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADAM are renamed.</p>
+<p>In this case all the columns come from <code>DM</code> so that is the only dataset we will pass into <code>build_from_derived</code>. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADaM are renamed.</p>
 <pre class="r"><code>adsl_preds &lt;- build_from_derived(metacore, 
-                                 ds_list = list(&quot;dm&quot; = sdtm_dm), 
+                                 ds_list = list(&quot;dm&quot; = admiral_dm), 
                                  predecessor_only = FALSE, keep = TRUE)
-head(adsl_preds)</code></pre>
-<pre><code>##        STUDYID     USUBJID SUBJID SITEID                  ARM AGE  AGEU  RACE
-## 1 CDISCPILOT01 01-701-1015   1015    701              Placebo  63 YEARS WHITE
-## 2 CDISCPILOT01 01-701-1023   1023    701              Placebo  64 YEARS WHITE
-## 3 CDISCPILOT01 01-701-1028   1028    701 Xanomeline High Dose  71 YEARS WHITE
-## 4 CDISCPILOT01 01-701-1033   1033    701  Xanomeline Low Dose  74 YEARS WHITE
-## 5 CDISCPILOT01 01-701-1034   1034    701 Xanomeline High Dose  77 YEARS WHITE
-## 6 CDISCPILOT01 01-701-1047   1047    701              Placebo  85 YEARS WHITE
-##   SEX                 ETHNIC DTHFL    RFSTDTC    RFENDTC               TRT01P
-## 1   F     HISPANIC OR LATINO  &lt;NA&gt; 2014-01-02 2014-07-02              Placebo
-## 2   M     HISPANIC OR LATINO  &lt;NA&gt; 2012-08-05 2012-09-02              Placebo
-## 3   M NOT HISPANIC OR LATINO  &lt;NA&gt; 2013-07-19 2014-01-14 Xanomeline High Dose
-## 4   M NOT HISPANIC OR LATINO  &lt;NA&gt; 2014-03-18 2014-04-14  Xanomeline Low Dose
-## 5   F NOT HISPANIC OR LATINO  &lt;NA&gt; 2014-07-01 2014-12-30 Xanomeline High Dose
-## 6   F NOT HISPANIC OR LATINO  &lt;NA&gt; 2013-02-12 2013-03-29              Placebo</code></pre>
-<p>Now we have the base dataset, we can start to create some variables. I am going to start with creating the subgroups using the control terminology, in this case AGEGR1. The metacore object holds all the metadata needed to make ADSL. Part of that metadat is the control terminology, which can help automate the creation of subgroups. We can look into the metacore object and see the control terminology for AGRGR1.</p>
+head(adsl_preds, n=10)</code></pre>
+<pre><code>## # A tibble: 10 × 14
+##    STUDYID      USUBJID SUBJID SITEID ARM     AGE AGEU  RACE  SEX   ETHNIC DTHFL
+##    &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+##  1 CDISCPILOT01 01-701… 1015   701    Plac…    63 YEARS WHITE F     HISPA… &quot;&quot;   
+##  2 CDISCPILOT01 01-701… 1023   701    Plac…    64 YEARS WHITE M     HISPA… &quot;&quot;   
+##  3 CDISCPILOT01 01-701… 1028   701    Xano…    71 YEARS WHITE M     NOT H… &quot;&quot;   
+##  4 CDISCPILOT01 01-701… 1033   701    Xano…    74 YEARS WHITE M     NOT H… &quot;&quot;   
+##  5 CDISCPILOT01 01-701… 1034   701    Xano…    77 YEARS WHITE F     NOT H… &quot;&quot;   
+##  6 CDISCPILOT01 01-701… 1047   701    Plac…    85 YEARS WHITE F     NOT H… &quot;&quot;   
+##  7 CDISCPILOT01 01-701… 1057   701    Scre…    59 YEARS WHITE F     HISPA… &quot;&quot;   
+##  8 CDISCPILOT01 01-701… 1097   701    Xano…    68 YEARS WHITE M     NOT H… &quot;&quot;   
+##  9 CDISCPILOT01 01-701… 1111   701    Xano…    81 YEARS WHITE F     NOT H… &quot;&quot;   
+## 10 CDISCPILOT01 01-701… 1115   701    Xano…    84 YEARS WHITE M     NOT H… &quot;&quot;   
+## # … with 3 more variables: RFSTDTC &lt;chr&gt;, RFENDTC &lt;chr&gt;, TRT01P &lt;chr&gt;</code></pre>
+<p>Now we have the base dataset, we can start to create some variables. We can start with creating the subgroups using the controlled terminology, in this case <code>AGEGR1</code>. The metacore object holds all the metadata needed to make <code>ADSL</code>. Part of that metadata is the controlled terminology, which can help automate the creation of subgroups. We can look into the <code>{metacore}</code> object and see the controlled terminology for <code>AGEGR1</code>.</p>
 <pre class="r"><code>get_control_term(metacore, variable = AGEGR1)</code></pre>
 <pre><code>## # A tibble: 3 × 2
 ##   code  decode
@@ -300,512 +293,122 @@ head(adsl_preds)</code></pre>
 ## 1 &lt;65   &lt;65   
 ## 2 65-80 65-80 
 ## 3 &gt;80   &gt;80</code></pre>
-<p>Because this control terminology is written in a fairly standard format we can automate the creation of AGEGR1. The {metatools} function <code>create_cat_var</code> takes in a metacore object, a reference variable, in this case AGE because the is the continues variable AGEGR1 created from, and the name of the sub-grouped variable. It will take the control terminology from the sub-grouped variable and cut the reference variables accordingly.</p>
-<p>Using a similar philosophy we can create the numeric version of RACE and TRT01P using the control terminology stored in the metacore object with the <code>create_var_from_codelist</code> function in {metatools}</p>
-<pre class="r"><code>adsl_preds %&gt;% 
-   create_cat_var(metacore, ref_var = AGE, 
-                  grp_var = AGEGR1, num_grp_var = AGEGR1N) %&gt;% 
-   select(AGE, AGEGR1, AGEGR1N)</code></pre>
-<pre><code>##     AGE AGEGR1 AGEGR1N
-## 1    63    &lt;65       1
-## 2    64    &lt;65       1
-## 3    71  65-80       2
-## 4    74  65-80       2
-## 5    77  65-80       2
-## 6    85    &gt;80       3
-## 7    59    &lt;65       1
-## 8    68  65-80       2
-## 9    81    &gt;80       3
-## 10   84    &gt;80       3
-## 11   52    &lt;65       1
-## 12   84    &gt;80       3
-## 13   81    &gt;80       3
-## 14   57    &lt;65       1
-## 15   75  65-80       2
-## 16   57    &lt;65       1
-## 17   79  65-80       2
-## 18   82    &gt;80       3
-## 19   62    &lt;65       1
-## 20   56    &lt;65       1
-## 21   79  65-80       2
-## 22   71  65-80       2
-## 23   80  65-80       2
-## 24   81    &gt;80       3
-## 25   76  65-80       2
-## 26   69  65-80       2
-## 27   56    &lt;65       1
-## 28   57    &lt;65       1
-## 29   61    &lt;65       1
-## 30   56    &lt;65       1
-## 31   67  65-80       2
-## 32   61    &lt;65       1
-## 33   80  65-80       2
-## 34   68  65-80       2
-## 35   79  65-80       2
-## 36   51    &lt;65       1
-## 37   63    &lt;65       1
-## 38   54    &lt;65       1
-## 39   67  65-80       2
-## 40   81    &gt;80       3
-## 41   74  65-80       2
-## 42   72  65-80       2
-## 43   71  65-80       2
-## 44   87    &gt;80       3
-## 45   78  65-80       2
-## 46   76  65-80       2
-## 47   85    &gt;80       3
-## 48   84    &gt;80       3
-## 49   70  65-80       2
-## 50   57    &lt;65       1
-## 51   63    &lt;65       1
-## 52   84    &gt;80       3
-## 53   64    &lt;65       1
-## 54   69  65-80       2
-## 55   71  65-80       2
-## 56   81    &gt;80       3
-## 57   84    &gt;80       3
-## 58   81    &gt;80       3
-## 59   75  65-80       2
-## 60   84    &gt;80       3
-## 61   76  65-80       2
-## 62   72  65-80       2
-## 63   78  65-80       2
-## 64   72  65-80       2
-## 65   88    &gt;80       3
-## 66   81    &gt;80       3
-## 67   67  65-80       2
-## 68   81    &gt;80       3
-## 69   84    &gt;80       3
-## 70   67  65-80       2
-## 71   76  65-80       2
-## 72   76  65-80       2
-## 73   83    &gt;80       3
-## 74   80  65-80       2
-## 75   77  65-80       2
-## 76   81    &gt;80       3
-## 77   75  65-80       2
-## 78   80  65-80       2
-## 79   79  65-80       2
-## 80   77  65-80       2
-## 81   71  65-80       2
-## 82   84    &gt;80       3
-## 83   74  65-80       2
-## 84   67  65-80       2
-## 85   81    &gt;80       3
-## 86   87    &gt;80       3
-## 87   86    &gt;80       3
-## 88   71  65-80       2
-## 89   82    &gt;80       3
-## 90   68  65-80       2
-## 91   81    &gt;80       3
-## 92   80  65-80       2
-## 93   70  65-80       2
-## 94   81    &gt;80       3
-## 95   74  65-80       2
-## 96   75  65-80       2
-## 97   75  65-80       2
-## 98   69  65-80       2
-## 99   56    &lt;65       1
-## 100  89    &gt;80       3
-## 101  66  65-80       2
-## 102  78  65-80       2
-## 103  84    &gt;80       3
-## 104  87    &gt;80       3
-## 105  70  65-80       2
-## 106  56    &lt;65       1
-## 107  73  65-80       2
-## 108  70  65-80       2
-## 109  60    &lt;65       1
-## 110  72  65-80       2
-## 111  74  65-80       2
-## 112  86    &gt;80       3
-## 113  63    &lt;65       1
-## 114  82    &gt;80       3
-## 115  84    &gt;80       3
-## 116  87    &gt;80       3
-## 117  68  65-80       2
-## 118  64    &lt;65       1
-## 119  60    &lt;65       1
-## 120  74  65-80       2
-## 121  72  65-80       2
-## 122  65  65-80       2
-## 123  72  65-80       2
-## 124  81    &gt;80       3
-## 125  76  65-80       2
-## 126  80  65-80       2
-## 127  68  65-80       2
-## 128  62    &lt;65       1
-## 129  73  65-80       2
-## 130  88    &gt;80       3
-## 131  73  65-80       2
-## 132  74  65-80       2
-## 133  78  65-80       2
-## 134  81    &gt;80       3
-## 135  77  65-80       2
-## 136  77  65-80       2
-## 137  70  65-80       2
-## 138  76  65-80       2
-## 139  78  65-80       2
-## 140  86    &gt;80       3
-## 141  80  65-80       2
-## 142  61    &lt;65       1
-## 143  82    &gt;80       3
-## 144  80  65-80       2
-## 145  57    &lt;65       1
-## 146  61    &lt;65       1
-## 147  74  65-80       2
-## 148  73  65-80       2
-## 149  59    &lt;65       1
-## 150  61    &lt;65       1
-## 151  79  65-80       2
-## 152  87    &gt;80       3
-## 153  87    &gt;80       3
-## 154  84    &gt;80       3
-## 155  67  65-80       2
-## 156  71  65-80       2
-## 157  84    &gt;80       3
-## 158  76  65-80       2
-## 159  54    &lt;65       1
-## 160  72  65-80       2
-## 161  82    &gt;80       3
-## 162  86    &gt;80       3
-## 163  69  65-80       2
-## 164  79  65-80       2
-## 165  71  65-80       2
-## 166  72  65-80       2
-## 167  77  65-80       2
-## 168  84    &gt;80       3
-## 169  88    &gt;80       3
-## 170  69  65-80       2
-## 171  82    &gt;80       3
-## 172  87    &gt;80       3
-## 173  62    &lt;65       1
-## 174  60    &lt;65       1
-## 175  65  65-80       2
-## 176  68  65-80       2
-## 177  75  65-80       2
-## 178  70  65-80       2
-## 179  81    &gt;80       3
-## 180  77  65-80       2
-## 181  88    &gt;80       3
-## 182  77  65-80       2
-## 183  79  65-80       2
-## 184  83    &gt;80       3
-## 185  83    &gt;80       3
-## 186  84    &gt;80       3
-## 187  82    &gt;80       3
-## 188  85    &gt;80       3
-## 189  76  65-80       2
-## 190  81    &gt;80       3
-## 191  89    &gt;80       3
-## 192  69  65-80       2
-## 193  79  65-80       2
-## 194  76  65-80       2
-## 195  79  65-80       2
-## 196  84    &gt;80       3
-## 197  81    &gt;80       3
-## 198  80  65-80       2
-## 199  78  65-80       2
-## 200  56    &lt;65       1
-## 201  79  65-80       2
-## 202  85    &gt;80       3
-## 203  78  65-80       2
-## 204  83    &gt;80       3
-## 205  86    &gt;80       3
-## 206  81    &gt;80       3
-## 207  78  65-80       2
-## 208  78  65-80       2
-## 209  83    &gt;80       3
-## 210  73  65-80       2
-## 211  73  65-80       2
-## 212  82    &gt;80       3
-## 213  88    &gt;80       3
-## 214  89    &gt;80       3
-## 215  80  65-80       2
-## 216  77  65-80       2
-## 217  80  65-80       2
-## 218  88    &gt;80       3
-## 219  67  65-80       2
-## 220  86    &gt;80       3
-## 221  70  65-80       2
-## 222  76  65-80       2
-## 223  74  65-80       2
-## 224  62    &lt;65       1
-## 225  74  65-80       2
-## 226  82    &gt;80       3
-## 227  75  65-80       2
-## 228  77  65-80       2
-## 229  61    &lt;65       1
-## 230  84    &gt;80       3
-## 231  78  65-80       2
-## 232  74  65-80       2
-## 233  74  65-80       2
-## 234  79  65-80       2
-## 235  64    &lt;65       1
-## 236  77  65-80       2
-## 237  71  65-80       2
-## 238  73  65-80       2
-## 239  71  65-80       2
-## 240  88    &gt;80       3
-## 241  79  65-80       2
-## 242  75  65-80       2
-## 243  77  65-80       2
-## 244  78  65-80       2
-## 245  81    &gt;80       3
-## 246  77  65-80       2
-## 247  65  65-80       2
-## 248  50    &lt;65       1
-## 249  59    &lt;65       1
-## 250  78  65-80       2
-## 251  77  65-80       2
-## 252  65  65-80       2
-## 253  75  65-80       2
-## 254  75  65-80       2
-## 255  76  65-80       2
-## 256  69  65-80       2
-## 257  73  65-80       2
-## 258  79  65-80       2
-## 259  87    &gt;80       3
-## 260  73  65-80       2
-## 261  83    &gt;80       3
-## 262  74  65-80       2
-## 263  81    &gt;80       3
-## 264  80  65-80       2
-## 265  78  65-80       2
-## 266  82    &gt;80       3
-## 267  79  65-80       2
-## 268  86    &gt;80       3
-## 269  83    &gt;80       3
-## 270  85    &gt;80       3
-## 271  83    &gt;80       3
-## 272  68  65-80       2
-## 273  72  65-80       2
-## 274  81    &gt;80       3
-## 275  73  65-80       2
-## 276  72  65-80       2
-## 277  76  65-80       2
-## 278  73  65-80       2
-## 279  76  65-80       2
-## 280  78  65-80       2
-## 281  59    &lt;65       1
-## 282  84    &gt;80       3
-## 283  74  65-80       2
-## 284  80  65-80       2
-## 285  85    &gt;80       3
-## 286  72  65-80       2
-## 287  80  65-80       2
-## 288  84    &gt;80       3
-## 289  73  65-80       2
-## 290  85    &gt;80       3
-## 291  64    &lt;65       1
-## 292  77  65-80       2
-## 293  75  65-80       2
-## 294  79  65-80       2
-## 295  67  65-80       2
-## 296  82    &gt;80       3
-## 297  77  65-80       2
-## 298  73  65-80       2
-## 299  80  65-80       2
-## 300  74  65-80       2
-## 301  82    &gt;80       3
-## 302  78  65-80       2
-## 303  86    &gt;80       3
-## 304  79  65-80       2
-## 305  69  65-80       2
-## 306  74  65-80       2</code></pre>
+<p>Because this controlled terminology is written in a fairly standard format we can automate the creation of <code>AGEGR1</code>. The <code>{metatools}</code> function <code>create_cat_var</code> takes in a <code>{metacore}</code> object, a reference variable - in this case <code>AGE</code> because that is the continuous variable <code>AGEGR1</code> is created from, and the name of the sub-grouped variable. It will take the controlled terminology from the sub-grouped variable and group the reference variables accordingly.</p>
+<p>Using a similar philosophy we can create the numeric version of <code>RACE</code> using the controlled terminology stored in the <code>{metacore}</code> object with the <code>create_var_from_codelist</code> function in <code>{metatools}</code></p>
 <pre class="r"><code>adsl_ct &lt;- adsl_preds %&gt;% 
    create_cat_var(metacore, ref_var = AGE, 
                   grp_var = AGEGR1, num_grp_var = AGEGR1N) %&gt;% 
-   create_var_from_codelist(metacore, RACE, RACEN) %&gt;% 
-   create_var_from_codelist(metacore, TRT01P, TRT01PN) %&gt;% 
-   mutate(
-      SITEID = as.character(SITEID),
-      SITEGR1 = SITEID, 
-      TRT01A = TRT01P,
-      TRT01AN = TRT01PN,
-      ITTFL = if_else(!is.na(ARM) &amp; ARM != &quot;Screen Failure&quot;, &quot;Y&quot;, &quot;N&quot;))</code></pre>
-<p>Now we have sorted out what we can we easily do with control terminology it is time to start coding up some variables. We are going to start with the exposure variables. We need to get the start and end of treatment as well as the treatment duration, the cumulative and the average dose.</p>
-<pre class="r"><code>adsl_dates &lt;- adsl_ct %&gt;%
-   derive_var_trtsdtm(dataset_ex = sdtm_ex) %&gt;% # Derive Datetime of First Exposure to Treatment
-   derive_var_trtedtm(dataset_ex = sdtm_ex) %&gt;% # Derive Datetime of Last Exposure to Treatment
+   create_var_from_codelist(metacore = metacore, 
+                            input_var = RACE, 
+                            out_var = RACEN) %&gt;% 
+   #Removing screen failures from ARM and TRT01P to match the define and FDA guidence
+   mutate(ARM = if_else(ARM == &quot;Screen Failure&quot;, NA_character_, ARM),
+          TRT01P = if_else(TRT01P == &quot;Screen Failure&quot;, NA_character_, TRT01P)
+   )
+
+head(adsl_ct, n=10)</code></pre>
+<pre><code>## # A tibble: 10 × 17
+##    STUDYID      USUBJID SUBJID SITEID ARM     AGE AGEU  RACE  SEX   ETHNIC DTHFL
+##    &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+##  1 CDISCPILOT01 01-701… 1015   701    Plac…    63 YEARS WHITE F     HISPA… &quot;&quot;   
+##  2 CDISCPILOT01 01-701… 1023   701    Plac…    64 YEARS WHITE M     HISPA… &quot;&quot;   
+##  3 CDISCPILOT01 01-701… 1028   701    Xano…    71 YEARS WHITE M     NOT H… &quot;&quot;   
+##  4 CDISCPILOT01 01-701… 1033   701    Xano…    74 YEARS WHITE M     NOT H… &quot;&quot;   
+##  5 CDISCPILOT01 01-701… 1034   701    Xano…    77 YEARS WHITE F     NOT H… &quot;&quot;   
+##  6 CDISCPILOT01 01-701… 1047   701    Plac…    85 YEARS WHITE F     NOT H… &quot;&quot;   
+##  7 CDISCPILOT01 01-701… 1057   701    &lt;NA&gt;     59 YEARS WHITE F     HISPA… &quot;&quot;   
+##  8 CDISCPILOT01 01-701… 1097   701    Xano…    68 YEARS WHITE M     NOT H… &quot;&quot;   
+##  9 CDISCPILOT01 01-701… 1111   701    Xano…    81 YEARS WHITE F     NOT H… &quot;&quot;   
+## 10 CDISCPILOT01 01-701… 1115   701    Xano…    84 YEARS WHITE M     NOT H… &quot;&quot;   
+## # … with 6 more variables: RFSTDTC &lt;chr&gt;, RFENDTC &lt;chr&gt;, TRT01P &lt;chr&gt;,
+## #   AGEGR1 &lt;chr&gt;, AGEGR1N &lt;dbl&gt;, RACEN &lt;dbl&gt;</code></pre>
+<p>Now we have sorted out what we can easily do with controlled terminology it is time to start deriving some variables.
+Here you could refer directly to using the <code>{admiral}</code> template and <a href="https://pharmaverse.github.io/admiral/articles/adsl.html">vignette</a> in practice, but for the purpose of this end-to-end ADaM vignette we will share a few exposure derivations from there.
+We derive the start and end of treatment, the treatment duration, and the safety population flag.</p>
+<pre class="r"><code>adsl_raw &lt;- adsl_ct %&gt;%
+  derive_vars_merged_dtm(
+    dataset_add = admiral_ex,
+    filter_add = (EXDOSE &gt; 0 |
+      (EXDOSE == 0 &amp;
+        str_detect(EXTRT, &quot;PLACEBO&quot;))) &amp; nchar(EXSTDTC) &gt;= 10,
+    new_vars_prefix = &quot;TRTS&quot;,
+    dtc = EXSTDTC,
+    order = vars(TRTSDTM, EXSEQ),
+    mode = &quot;first&quot;,
+    by_vars = vars(STUDYID, USUBJID)
+  ) %&gt;%
+  derive_vars_merged_dtm(
+    dataset_add = admiral_ex,
+    filter_add = (EXDOSE &gt; 0 |
+      (EXDOSE == 0 &amp;
+        str_detect(EXTRT, &quot;PLACEBO&quot;))) &amp; nchar(EXENDTC) &gt;= 10,
+    new_vars_prefix = &quot;TRTE&quot;,
+    dtc = EXENDTC,
+    time_imputation = &quot;last&quot;,
+    order = vars(TRTEDTM, EXSEQ),
+    mode = &quot;last&quot;,
+    by_vars = vars(STUDYID, USUBJID)
+  ) %&gt;%
    derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %&gt;%  #Convert Datetime variables to date 
    derive_var_trtdurd() %&gt;% 
-   mutate(TRTDURD = as.numeric(TRTEDT - TRTSDT) + 1, #derive_var_trtdurd
-          CUMDOSE = TRT01PN * TRTDURD, # switch to admiral 
-          AVGDD = CUMDOSE/TRTDURD,
-          SAFFL = if_else(ITTFL == &quot;Y&quot; &amp; !is.na(TRTSDT), &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
-   drop_unspec_vars(metacore)</code></pre>
-<pre class="r"><code>adsl_dispo &lt;- adsl_dates %&gt;% 
-   # Derive a Disposition Status 
-   derive_var_disposition_status(
-      dataset_ds = sdtm_ds,
-      new_var = EOSSTT,
-      status_var = DSDECOD,
-      filter = DSCAT == &quot;DISPOSITION EVENT&quot;
-   ) %&gt;%
-   # Derive a Disposition Reason
-   derive_vars_disposition_reason(
-      dataset_ds = sdtm_ds,
-      new_var = DCSREAS,
-      reason_var = DSDECOD,
-      filter = DSCAT == &quot;DISPOSITION EVENT&quot; &amp; DSDECOD != &quot;SCREEN FAILURE&quot;
+   derive_var_merged_exist_flag(
+     dataset_add = admiral_ex,
+     by_vars = vars(STUDYID, USUBJID),
+     new_var = SAFFL,
+     condition = (EXDOSE &gt; 0 | (EXDOSE == 0 &amp; str_detect(EXTRT, &quot;PLACEBO&quot;)))
    ) %&gt;% 
-   # Derived Disposition Date 
-   derive_var_disposition_dt(
-      dataset_ds = sdtm_ds,
-      new_var = RFENDT,
-      dtc = DSSTDTC,
-      filter_ds = DSCAT == &quot;OTHER EVENT&quot; &amp; DSDECOD == &quot;FINAL RETRIEVAL VISIT&quot;
-   ) %&gt;% 
-   # Getting the standardize dispositions from codelist 
-   create_var_from_codelist(metacore, EOSSTT, DCDECOD) %&gt;% 
-   # Creating disposition flags 
-   mutate(
-      DISCONFL = if_else(DCDECOD != &quot;COMPLETED&quot;, &quot;Y&quot;, NA_character_),
-      DSRAEFL = if_else(DCDECOD != &quot;ADVERSE EVENT&quot;, &quot;Y&quot;, NA_character_))
+   drop_unspec_vars(metacore) #This will drop any columns that aren&#39;t specificed in the metacore object
 
-# Get end of treatment visit 
-adsl_dispo &lt;- sdtm_ds %&gt;% 
-   filter(DSTERM ==&#39;PROTOCOL COMPLETED&#39;) %&gt;% 
-   mutate(VISNUMEN = if_else(VISITNUM == 13, 12, VISITNUM)) %&gt;% 
-   select(USUBJID, VISNUMEN) %&gt;% 
-   left_join(adsl_dispo, ., by = &quot;USUBJID&quot;)</code></pre>
-<pre class="r"><code># Get heights at screening cause those are the only heights available 
-heights &lt;- sdtm_vs %&gt;% 
-   filter(VISITNUM == 1, VSTESTCD == &#39;HEIGHT&#39;) %&gt;% 
-   select(USUBJID, VSTEST, VSSTRESN)
-
-bmis &lt;- sdtm_vs %&gt;% 
-   # Get baseline weight 
-   filter( VISITNUM == 3, VSTESTCD == &quot;WEIGHT&quot;) %&gt;% 
-   select(USUBJID, VSTEST, VSSTRESN) %&gt;% 
-   # Combine with height 
-   bind_rows(heights) %&gt;% 
-   # Pivot to a row per subject and calculate BMIBL
-   pivot_wider(names_from = VSTEST, values_from = VSSTRESN) %&gt;% 
-   mutate(BMIBL = compute_bmi(Height, Weight)) %&gt;% 
-   rename(WEIGHTBL = Weight, HEIGHTBL = Height) %&gt;%
-   # Create the BMI grouping using the control terminology 
-   create_cat_var(metacore, BMIBL, BMIBLGR1)
-bmis </code></pre>
-<pre><code>## # A tibble: 254 × 5
-##    USUBJID     WEIGHTBL HEIGHTBL BMIBL BMIBLGR1
-##    &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   
-##  1 01-701-1015     54.4     147.  25.1 25-&lt;30  
-##  2 01-701-1023     80.3     163.  30.4 &gt;=30    
-##  3 01-701-1028     99.3     178.  31.4 &gt;=30    
-##  4 01-701-1033     88.4     175.  28.8 25-&lt;30  
-##  5 01-701-1034     62.6     155.  26.1 25-&lt;30  
-##  6 01-701-1047     67.1     149.  30.4 &gt;=30    
-##  7 01-701-1097     78.0     169.  27.3 25-&lt;30  
-##  8 01-701-1111     59.9     158.  23.9 &lt;25     
-##  9 01-701-1115     78.9     182.  23.9 &lt;25     
-## 10 01-701-1118     71.2     180.  21.9 &lt;25     
-## # … with 244 more rows</code></pre>
-<pre class="r"><code>adsl_bmi &lt;- left_join(adsl_dispo, bmis, by = &quot;USUBJID&quot;)</code></pre>
+head(adsl_raw, n=10)</code></pre>
+<pre><code>## # A tibble: 10 × 21
+##    STUDYID      USUBJID SUBJID SITEID ARM     AGE AGEU  RACE  SEX   ETHNIC DTHFL
+##    &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+##  1 CDISCPILOT01 01-701… 1015   701    Plac…    63 YEARS WHITE F     HISPA… &quot;&quot;   
+##  2 CDISCPILOT01 01-701… 1023   701    Plac…    64 YEARS WHITE M     HISPA… &quot;&quot;   
+##  3 CDISCPILOT01 01-701… 1028   701    Xano…    71 YEARS WHITE M     NOT H… &quot;&quot;   
+##  4 CDISCPILOT01 01-701… 1033   701    Xano…    74 YEARS WHITE M     NOT H… &quot;&quot;   
+##  5 CDISCPILOT01 01-701… 1034   701    Xano…    77 YEARS WHITE F     NOT H… &quot;&quot;   
+##  6 CDISCPILOT01 01-701… 1047   701    Plac…    85 YEARS WHITE F     NOT H… &quot;&quot;   
+##  7 CDISCPILOT01 01-701… 1057   701    &lt;NA&gt;     59 YEARS WHITE F     HISPA… &quot;&quot;   
+##  8 CDISCPILOT01 01-701… 1097   701    Xano…    68 YEARS WHITE M     NOT H… &quot;&quot;   
+##  9 CDISCPILOT01 01-701… 1111   701    Xano…    81 YEARS WHITE F     NOT H… &quot;&quot;   
+## 10 CDISCPILOT01 01-701… 1115   701    Xano…    84 YEARS WHITE M     NOT H… &quot;&quot;   
+## # … with 10 more variables: RFSTDTC &lt;chr&gt;, RFENDTC &lt;chr&gt;, TRT01P &lt;chr&gt;,
+## #   AGEGR1 &lt;chr&gt;, AGEGR1N &lt;dbl&gt;, RACEN &lt;dbl&gt;, TRTSDT &lt;date&gt;, TRTEDT &lt;date&gt;,
+## #   TRTDURD &lt;dbl&gt;, SAFFL &lt;chr&gt;</code></pre>
 </div>
-<div id="apply-codelists" class="section level2">
-<h2>Apply Codelists</h2>
-<pre class="r"><code>completer_cal &lt;- function(.data, wk_num, sv){
-   new_col &lt;- paste0(&quot;COMP&quot;, wk_num, &quot;FL&quot;) %&gt;% sym()
-
-   sv %&gt;% 
-      group_by(USUBJID) %&gt;% 
-      filter(VISIT == paste(&quot;WEEK&quot;, wk_num)) %&gt;% 
-      select(USUBJID, SVSTDTC) %&gt;% 
-      left_join(.data, . , by = &quot;USUBJID&quot;) %&gt;% 
-      mutate({{new_col }}:= ifelse(!is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC, &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
-      select(-SVSTDTC)
-}
-
-first_visit &lt;- sdtm_sv %&gt;% 
-   filter(VISITNUM == 1) %&gt;% 
-   mutate(VISIT1DT = as_date(SVSTDTC)) %&gt;%
-   select(USUBJID, VISIT1DT) 
-
-adsl_fls &lt;- adsl_bmi %&gt;% 
-   completer_cal(8, sdtm_sv) %&gt;% 
-   completer_cal(16, sdtm_sv) %&gt;% 
-   completer_cal(24, sdtm_sv) %&gt;% 
-   left_join(first_visit, by= &quot;USUBJID&quot;)</code></pre>
-<pre><code>## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
-## coercion to &#39;logical(1)&#39;
-
-## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
-## coercion to &#39;logical(1)&#39;
-
-## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
-## coercion to &#39;logical(1)&#39;
-
-## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
-## coercion to &#39;logical(1)&#39;
-
-## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
-## coercion to &#39;logical(1)&#39;
-
-## Warning in !is.na(SVSTDTC) &amp;&amp; TRTEDT &gt;= SVSTDTC: &#39;length(x) = 306 &gt; 1&#39; in
-## coercion to &#39;logical(1)&#39;</code></pre>
-<pre class="r"><code>adsl_ed &lt;- sdtm_sc %&gt;% 
-   filter(SCTESTCD == &quot;EDLEVEL&quot;) %&gt;% 
-   select(USUBJID, SCSTRESN) %&gt;% 
-   rename(EDUCLVL = SCSTRESN) %&gt;% 
-   left_join(adsl_fls, ., by = &quot;USUBJID&quot;)
-
-adsl_alz &lt;- sdtm_qs %&gt;% 
-   group_by(USUBJID) %&gt;% 
-   filter(QSCAT == &quot;ALZHEIMER&#39;S DISEASE ASSESSMENT SCALE&quot;) %&gt;%
-   summarise(MMSETOT = sum(as.numeric(QSORRES), na.rm = TRUE)) %&gt;% 
-   left_join(adsl_ed, ., by = &quot;USUBJID&quot;)
-
-adsl_mh &lt;- sdtm_mh %&gt;% 
-   filter(MHCAT == &quot;PRIMARY DIAGNOSIS&quot;) %&gt;% 
-   mutate(DISONSDT = as_date(MHSTDTC)) %&gt;%
-   select(USUBJID, DISONSDT) %&gt;% 
-   left_join(adsl_alz, ., by = &quot;USUBJID&quot;) %&gt;% 
-   mutate(DURDIS = interval(DISONSDT, VISIT1DT) %/% months(1)) %&gt;% 
-   create_cat_var(metacore, DURDIS, DURDSGR1)</code></pre>
-<pre class="r"><code>adsl_raw &lt;- sdtm_qs %&gt;% 
-   filter(VISITNUM &gt; 3) %&gt;% 
-   group_by(USUBJID) %&gt;% 
-   summarise(efffl = any(QSTEST == &quot;ADAS-COG(11) Subscore&quot;) &amp; any(QSTESTCD == &quot;CIBIC&quot;)) %&gt;% 
-   left_join(adsl_mh, by = &quot;USUBJID&quot;) %&gt;% 
-   mutate(EFFFL = if_else(efffl &amp; SAFFL == &quot;Y&quot;, &quot;Y&quot;, &quot;N&quot;)) %&gt;% 
-   drop_unspec_vars(metacore) #This will drop any columns that aren&#39;t specificed in the metacore object</code></pre>
+<div id="apply-metadata-to-create-an-esub-xpt-and-perform-associated-checks" class="section level2">
+<h2>Apply Metadata to Create an eSub XPT and Perform Associated Checks</h2>
 <p>Now we have all the variables defined we can run some checks before applying the necessary formatting.</p>
-<pre class="r"><code>test &lt;- metacore$var_spec %&gt;% 
-   select(variable, type) %&gt;% 
-   mutate(dataset = &quot;ADSL&quot;)
-
-adsl_raw %&gt;% 
+<pre class="r"><code>adsl_raw %&gt;% 
    check_variables(metacore) %&gt;% # Check all variables specified are present and no more
-   check_ct_data(metacore) %&gt;% # Checks all variables with CT only contain values within the CT
+   check_ct_data(metacore, na_acceptable = TRUE) %&gt;% # Checks all variables with CT only contain values within the CT
    order_cols(metacore) %&gt;% # Orders the columns according to the spec
    sort_by_key(metacore) %&gt;% # Sorts the rows by the sort keys 
-   xportr_type(test) %&gt;% # Coerce variable type to match spec
+   xportr_type(metacore) %&gt;% # Coerce variable type to match spec
    xportr_length(metacore) %&gt;% # Assigns SAS length from a variable level metadata 
    xportr_label(metacore) %&gt;% # Assigns variable label from metacore specifications 
    xportr_df_label(metacore) # Assigns dataset label from metacore specifications</code></pre>
-<pre><code>## No missing or extra variables</code></pre>
-<pre><code>## # A tibble: 248 × 49
-##    STUDYID     USUBJID SUBJID SITEID SITEGR1 ARM   TRT01P TRT01PN TRT01A TRT01AN
-##    &lt;chr&gt;       &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
-##  1 CDISCPILOT… 01-701…   1015 701    701     Plac… Place…       0 Place…       0
-##  2 CDISCPILOT… 01-701…   1023 701    701     Plac… Place…       0 Place…       0
-##  3 CDISCPILOT… 01-701…   1028 701    701     Xano… Xanom…      81 Xanom…      81
-##  4 CDISCPILOT… 01-701…   1033 701    701     Xano… Xanom…      54 Xanom…      54
-##  5 CDISCPILOT… 01-701…   1034 701    701     Xano… Xanom…      81 Xanom…      81
-##  6 CDISCPILOT… 01-701…   1047 701    701     Plac… Place…       0 Place…       0
-##  7 CDISCPILOT… 01-701…   1097 701    701     Xano… Xanom…      54 Xanom…      54
-##  8 CDISCPILOT… 01-701…   1111 701    701     Xano… Xanom…      54 Xanom…      54
-##  9 CDISCPILOT… 01-701…   1115 701    701     Xano… Xanom…      54 Xanom…      54
-## 10 CDISCPILOT… 01-701…   1118 701    701     Plac… Place…       0 Place…       0
-## # … with 238 more rows, and 39 more variables: TRTSDT &lt;dbl&gt;, TRTEDT &lt;dbl&gt;,
-## #   TRTDURD &lt;dbl&gt;, AVGDD &lt;dbl&gt;, CUMDOSE &lt;dbl&gt;, AGE &lt;dbl&gt;, AGEGR1 &lt;chr&gt;,
-## #   AGEGR1N &lt;dbl&gt;, AGEU &lt;chr&gt;, RACE &lt;chr&gt;, RACEN &lt;dbl&gt;, SEX &lt;chr&gt;,
-## #   ETHNIC &lt;chr&gt;, SAFFL &lt;chr&gt;, ITTFL &lt;chr&gt;, EFFFL &lt;chr&gt;, COMP8FL &lt;chr&gt;,
-## #   COMP16FL &lt;chr&gt;, COMP24FL &lt;chr&gt;, DISCONFL &lt;chr&gt;, DSRAEFL &lt;chr&gt;, DTHFL &lt;chr&gt;,
-## #   BMIBL &lt;dbl&gt;, BMIBLGR1 &lt;chr&gt;, HEIGHTBL &lt;dbl&gt;, WEIGHTBL &lt;dbl&gt;, EDUCLVL &lt;dbl&gt;,
-## #   DISONSDT &lt;dbl&gt;, DURDIS &lt;dbl&gt;, DURDSGR1 &lt;chr&gt;, VISIT1DT &lt;dbl&gt;, …</code></pre>
+<pre><code>## # A tibble: 306 × 49
+##    STUDYID USUBJID SUBJID SITEID SITEGR1   ARM TRT01P TRT01PN TRT01A TRT01AN
+##      &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1      NA      NA   1015    701      NA    NA     NA      NA     NA      NA
+##  2      NA      NA   1023    701      NA    NA     NA      NA     NA      NA
+##  3      NA      NA   1028    701      NA    NA     NA      NA     NA      NA
+##  4      NA      NA   1033    701      NA    NA     NA      NA     NA      NA
+##  5      NA      NA   1034    701      NA    NA     NA      NA     NA      NA
+##  6      NA      NA   1047    701      NA    NA     NA      NA     NA      NA
+##  7      NA      NA   1057    701      NA    NA     NA      NA     NA      NA
+##  8      NA      NA   1097    701      NA    NA     NA      NA     NA      NA
+##  9      NA      NA   1111    701      NA    NA     NA      NA     NA      NA
+## 10      NA      NA   1115    701      NA    NA     NA      NA     NA      NA
+## # … with 296 more rows, and 39 more variables: TRTSDT &lt;dbl&gt;, TRTEDT &lt;dbl&gt;,
+## #   TRTDURD &lt;dbl&gt;, AVGDD &lt;dbl&gt;, CUMDOSE &lt;dbl&gt;, AGE &lt;dbl&gt;, AGEGR1 &lt;dbl&gt;,
+## #   AGEGR1N &lt;dbl&gt;, AGEU &lt;dbl&gt;, RACE &lt;dbl&gt;, RACEN &lt;dbl&gt;, SEX &lt;dbl&gt;,
+## #   ETHNIC &lt;dbl&gt;, SAFFL &lt;dbl&gt;, ITTFL &lt;dbl&gt;, EFFFL &lt;dbl&gt;, COMP8FL &lt;dbl&gt;,
+## #   COMP16FL &lt;dbl&gt;, COMP24FL &lt;dbl&gt;, DISCONFL &lt;dbl&gt;, DSRAEFL &lt;dbl&gt;, DTHFL &lt;dbl&gt;,
+## #   BMIBL &lt;dbl&gt;, BMIBLGR1 &lt;dbl&gt;, HEIGHTBL &lt;dbl&gt;, WEIGHTBL &lt;dbl&gt;, EDUCLVL &lt;dbl&gt;,
+## #   DISONSDT &lt;dbl&gt;, DURDIS &lt;dbl&gt;, DURDSGR1 &lt;dbl&gt;, VISIT1DT &lt;dbl&gt;, …</code></pre>
 </div>
 
 
@@ -898,16 +501,16 @@ adsl_raw %&gt;%
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="../../js/clipboard.min.js?1653646545"></script>
-    <script src="../../js/perfect-scrollbar.min.js?1653646545"></script>
-    <script src="../../js/perfect-scrollbar.jquery.min.js?1653646545"></script>
-    <script src="../../js/jquery.sticky.js?1653646545"></script>
-    <script src="../../js/featherlight.min.js?1653646545"></script>
-    <script src="../../js/highlight.pack.js?1653646545"></script>
+    <script src="../../js/clipboard.min.js?1660053563"></script>
+    <script src="../../js/perfect-scrollbar.min.js?1660053563"></script>
+    <script src="../../js/perfect-scrollbar.jquery.min.js?1660053563"></script>
+    <script src="../../js/jquery.sticky.js?1660053563"></script>
+    <script src="../../js/featherlight.min.js?1660053563"></script>
+    <script src="../../js/highlight.pack.js?1660053563"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="../../js/modernizr.custom-3.6.0.js?1653646545"></script>
-    <script src="../../js/learn.js?1653646545"></script>
-    <script src="../../js/hugo-learn.js?1653646545"></script>
+    <script src="../../js/modernizr.custom-3.6.0.js?1660053563"></script>
+    <script src="../../js/learn.js?1660053563"></script>
+    <script src="../../js/hugo-learn.js?1660053563"></script>
     
         
             <script src="https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"></script>
