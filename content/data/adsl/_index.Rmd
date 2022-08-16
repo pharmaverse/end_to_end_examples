@@ -12,10 +12,12 @@ This guide will show you how four pharmaverse packages, along with some from tid
 
 The four packages used with a brief description of their purpose are as follows:
 
-* `{metacore}`: provides harmonized metadata/specifications object.
-* `{metatools}`: uses the provided metadata to build/enhance and check the dataset.
-* `{admiral}`: provides the ADaM derivations.
-* `{xportr}`: delivers the SAS transport file (XPT) and eSub checks.
+* [`{metacore}`](https://atorus-research.github.io/metacore/): provides harmonized metadata/specifications object.
+* [`{metatools}`](https://pharmaverse.github.io/metatools/): uses the provided metadata to build/enhance and check the dataset.
+* [`{admiral}`](https://pharmaverse.github.io/admiral/index.html): provides the ADaM derivations.
+* [`{xportr}`](https://atorus-research.github.io/xportr/): delivers the SAS transport file (XPT) and eSub checks.
+
+It is important to understand `{metacore}` objects by reading through the above linked package site, as these are fundamental to being able to use `{metatools}` and `{xportr}`. Each company may need to build a specification reader to create these objects from their source standard specification templates.
 
 ## Load Data and Required pharmaverse Packages
 
@@ -48,18 +50,23 @@ Next we need to load the specification file in the form of a `{metacore}` object
 load(metacore_example("pilot_ADaM.rda"))
 metacore <- metacore %>% 
    select_dataset("ADSL")
+```
 
+Here is an example of how a `{metacore}` object looks showing variable level metadata:
+
+```{r}
+metacore$ds_vars
 ```
   
 ## Start Building Derivations
 
-The first derivation step we are going to do is to pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don't you can call `build_from_derived` with just an empty list and the error will tell you which datasets you need to supply. 
+The first derivation step we are going to do is to pull through all the columns that come directly from the SDTM datasets. You might know which datasets you are going to pull from directly already, but if you don't you can call `metatools::build_from_derived()` with just an empty list and the error will tell you which datasets you need to supply. 
 
 ```{r, error=TRUE}
 build_from_derived(metacore, list(), predecessor_only = FALSE)
 ```
 
-In this case all the columns come from `DM` so that is the only dataset we will pass into `build_from_derived`. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADaM are renamed.
+In this case all the columns come from `DM` so that is the only dataset we will pass into `metatools::build_from_derived()`. The resulting dataset has all the columns combined and any columns that needed renaming between SDTM and ADaM are renamed.
 
 ```{r demographcis}
 adsl_preds <- build_from_derived(metacore, 
@@ -74,9 +81,9 @@ Now we have the base dataset, we can start to create some variables. We can star
 get_control_term(metacore, variable = AGEGR1)
 ```
 
-Because this controlled terminology is written in a fairly standard format we can automate the creation of `AGEGR1`. The `{metatools}` function `create_cat_var` takes in a `{metacore}` object, a reference variable - in this case `AGE` because that is the continuous variable `AGEGR1` is created from, and the name of the sub-grouped variable. It will take the controlled terminology from the sub-grouped variable and group the reference variables accordingly. 
+Because this controlled terminology is written in a fairly standard format we can automate the creation of `AGEGR1`. The function `metatools::create_cat_var()` takes in a `{metacore}` object, a reference variable - in this case `AGE` because that is the continuous variable `AGEGR1` is created from, and the name of the sub-grouped variable. It will take the controlled terminology from the sub-grouped variable and group the reference variables accordingly. 
 
-Using a similar philosophy we can create the numeric version of `RACE` using the controlled terminology stored in the `{metacore}` object with the `create_var_from_codelist` function in `{metatools}`
+Using a similar philosophy we can create the numeric version of `RACE` using the controlled terminology stored in the `{metacore}` object with the `metatools::create_var_from_codelist()` function.
 
 ```{r ct}
 adsl_ct <- adsl_preds %>% 
@@ -169,13 +176,13 @@ adsl_raw <- adsl_raw %>%
     DCSREAS = NA,
     MMSETOT = NA
   )
-
-
 ```
 
 ## Apply Metadata to Create an eSub XPT and Perform Associated Checks
 
-Now we have all the variables defined we can run some checks before applying the necessary formatting. 
+Now we have all the variables defined we can run some checks before applying the necessary formatting.
+The top four functions performing checks and sorting/ordering come from `{metatools}`, whereas the others focused around applying attributes to prepare for XPT come from `{xportr}`. At the end you could add a call to `xportr::xportr_write()` to produce the XPT file.
+
 ```{r checks, warning=FALSE, message=FALSE}
 
 adsl_raw %>% 
