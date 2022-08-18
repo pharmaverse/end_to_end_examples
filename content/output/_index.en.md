@@ -1,11 +1,16 @@
-title	weight	pre	chapter	description
-Data
-1
-<b>1. </b>
-true
-STDM, ADaM and other data products
-Section 1
-Data Engineering examples
-This section will contain examples generating STDM, ADaM and other data derivatives.
+---
+title: Output
+weight: 1
+pre: "<b>1. </b>"
+chapter: true
+description: "Output and other products"
+---
 
-Initially we start with one example of how to produce the subject level ADaM (ADSL).
+### Section 2
+
+# Output examples
+
+This section will contain examples generating output demographic.
+
+Initially we start with one example of how to produce the demographic tables based on ADaM (ADSL).
+
