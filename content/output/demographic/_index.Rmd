@@ -47,7 +47,7 @@ adsl <- df_explicit_na(admiral_adsl)
 
 Now we will change some and add new variable `AGEGRP`. In the new variable we also are going to add levels in order to keep the required sequence of new categories on the final output.
 
-```{r demographcis}
+```{r}
 adsl <- adsl %>%
   mutate(
     SEX = factor(case_when(
@@ -82,7 +82,7 @@ var_labels <- c(
 
 Now we create the demographic table using the [`{rtables}`](https://roche.github.io/rtables/index.html) and [`{tern}`](https://insightsengineering.github.io/tern/main/index.html) packages.
 
-```{r table}
+```{r}
 result <- basic_table() %>%
   split_cols_by(var = "ARM") %>%
   add_colcounts() %>%
