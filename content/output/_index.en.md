@@ -10,7 +10,7 @@ description: "Output and other products"
 
 # Output examples
 
-This section will contain examples generating output demographic.
+This section will contain examples generating output demographics.
 
-Initially we start with one example of how to produce the demographic tables based on ADaM (ADSL).
+Initially we start with one example of how to produce the demographics tables based on ADaM (ADSL).
 
