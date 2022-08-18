@@ -8,7 +8,7 @@ description: "An example of how to generate an Demographic output based on ADaM 
 
 ## Introduction
 
-This guide will show you how two pharmaverse packages, along with some from tidyverse, can be used to create a Demographic table as an end-to-end, using the Admiral ADSL data as input.
+This guide will show you how two pharmaverse packages, along with some from tidyverse, can be used to create a Demographic table as an end-to-end, using the {admiral} ADSL data as an input.
 
 The two packages used with a brief description of their purpose are as follows:
 
@@ -73,7 +73,7 @@ var_labels <- c(
 )
 ```
 
-Now we create the demographic table using the [`{rtables}`](https://roche.github.io/rtables/index.html) and [`{tern}`](https://insightsengineering.github.io/tern/main/index.html) packages.
+Now we create the demographic table using the [`{rtables}`](https://roche.github.io/rtables/index.html) and [`{tern}`](https://insightsengineering.github.io/tern/main/index.html) packages, and using `ARM` as the grouping variable.
 
 ```{r}
 result <- basic_table() %>%
