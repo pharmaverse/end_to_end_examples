@@ -23,7 +23,7 @@ The eight packages used with a brief description of their purpose are as follows
 * [`{teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/main/index.html): contains a set of standard teal modules to be used with CDISC data in order to generate many of the standard outputs used in clinical trials
 
 
-In this exmaple it is important to understand [`{teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/main/index.html) in order to modify parametrs to the teal module: `tm_t_summary`.
+In this exmaple it is important to understand [`{teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/main/index.html) in order to modify parameters to the teal module: `tm_t_summary`.
 
 ## Load Data and Required pharmaverse Packages
 
@@ -111,7 +111,7 @@ app <- init(
 
 ```
 
-Now we run the shiny APP. Please note that parmeter options is only used to control rendering of the Shiny APP. 
+Now we run the shiny APP. Please note that parameter options is only used to control rendering of the Shiny APP. 
 
 ```{r}
 shinyApp(app$ui, app$server,
