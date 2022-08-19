@@ -10,6 +10,6 @@ description: "Shiny APP"
 
 # Shiny APP examples
 
-This section will contain examples creating APP with demographics output.
+This section will contain examples creating APP (interactive data display) with demographics output.
 
 Initially we start with one example of how to produce the demographics APP based on ADaM (ADSL).
