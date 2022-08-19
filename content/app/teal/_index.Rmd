@@ -111,7 +111,7 @@ app <- init(
 
 ```
 
-Now we run the shiny APP. Please note that parameter options is only used to control rendering of the Shiny APP. 
+Now we run the shiny APP. Please note that parameter option is only used to control rendering of the Shiny APP. 
 
 ```{r}
 shinyApp(app$ui, app$server,
