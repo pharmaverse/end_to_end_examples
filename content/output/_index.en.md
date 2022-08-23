@@ -1,6 +1,6 @@
 ---
-title: Output
-weight: 1
+title: TLGs
+weight: 2
 pre: "<b>1. </b>"
 chapter: true
 description: "Output and other products"
