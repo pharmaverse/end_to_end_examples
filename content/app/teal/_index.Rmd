@@ -113,8 +113,11 @@ app <- init(
 
 Now we run the shiny APP. Please note that parameter option is only used to control rendering of the Shiny APP. 
 
-```{r}
+```{r, eval = FALSE}
 shinyApp(app$ui, app$server,
   options = list(width = 1200, height= 600))
 ```
+
+While this code won't work, as this website is static - you can see an 
+example here: https://genentech.shinyapps.io/teal_efficacy/
 
