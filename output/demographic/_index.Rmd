@@ -1,0 +1,91 @@
+---
+title: "Create Demographic table"
+author: "Tadeusz Lewandowski"
+date: "16/08/2022"
+output: html_document
+description: "An example of how to generate an Demographic output based on ADaM dataset"
+---
+
+## Introduction
+
+This guide will show you how two pharmaverse packages, along with some from tidyverse, can be used to create a Demographic table as an end-to-end, using the {admiral} ADSL data as an input.
+
+The two packages used with a brief description of their purpose are as follows:
+
+* [`{rtables}`](https://roche.github.io/rtables/index.html): designed to create and display complex tables with R.
+* [`{tern}`](https://insightsengineering.github.io/tern/main/index.html): contains analysis functions to create tables and graphs used for clinical trial reporting.
+
+It is important to understand [`{rtables}`](https://roche.github.io/rtables/index.html) grammar by reading through the above linked package site, as these are fundamental to being able to use [`{tern}`](https://insightsengineering.github.io/tern/main/index.html). 
+
+## Load Data and Required pharmaverse Packages
+
+After installation of packages, the first step is to load our pharmaverse packages and input data.
+
+```{r setup, message=FALSE, warning=FALSE, results='hold'}
+options(repos = c(
+  pharmaverse = 'https://pharmaverse.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+
+library(admiral)
+library(rtables)
+library(tern)
+library(dplyr)
+
+# Read in input ADaM data 
+data("admiral_adsl")
+
+```
+  
+## Start preprocessing
+
+The first step we are going to encode missing entries across groups of categorical variables in a data frame `adsl`.
+
+
+```{r, error=TRUE}
+adsl <- df_explicit_na(admiral_adsl)
+```
+
+Now we will add some pre-processing.
+
+```{r}
+adsl <- adsl %>%
+  mutate(
+    SEX = factor(case_when(
+      SEX == "M" ~ "Male",
+      SEX == "F" ~ "Female",
+      SEX == "U" ~ "Unknown",
+      SEX == "UNDIFFERENTIATED" ~ "Undifferentiated"
+    ))
+  ) 
+
+```
+
+Now optionally we create lists: `vars` and `var_labels` which hold the variables and thier corresponding labels. We will use them in the next step.
+
+```{r}
+vars <- c("AGE", "AGEGR1", "SEX","RACE")
+
+var_labels <- c(
+  "Age (yr)",
+  "Age groups",
+  "Sex",
+  "Race"
+)
+```
+
+Now we create the demographic table using the [`{rtables}`](https://roche.github.io/rtables/index.html) and [`{tern}`](https://insightsengineering.github.io/tern/main/index.html) packages, and using `ARM` as the grouping variable.
+
+```{r}
+result <- basic_table() %>%
+  split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
+  summarize_vars(
+    vars = vars,
+    var_labels = var_labels
+  ) %>%
+  build_table(adsl)
+
+result
+```
+
+

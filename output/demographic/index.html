@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.101.0" />
+    <meta name="description" content="An example of how to generate an Demographic output based on ADaM dataset">
+
+
+    <link rel="icon" href="../../images/favicon.png" type="image/png">
+
+    <title>Create Demographic table - pharmaverse examples</title>
+
+    
+    <link href="../../css/nucleus.css?1661265075" rel="stylesheet">
+    <link href="../../css/fontawesome-all.min.css?1661265075" rel="stylesheet">
+    <link href="../../css/hybrid.css?1661265075" rel="stylesheet">
+    <link href="../../css/featherlight.min.css?1661265075" rel="stylesheet">
+    <link href="../../css/perfect-scrollbar.min.css?1661265075" rel="stylesheet">
+    <link href="../../css/auto-complete.css?1661265075" rel="stylesheet">
+    <link href="../../css/atom-one-dark-reasonable.css?1661265075" rel="stylesheet">
+    <link href="../../css/theme.css?1661265075" rel="stylesheet">
+    <link href="../../css/tabs.css?1661265075" rel="stylesheet">
+    <link href="../../css/hugo-theme.css?1661265075" rel="stylesheet">
+    
+    <link href="../../css/theme-red.css?1661265075" rel="stylesheet">
+    
+    <link href="../../css/foo.css?1661265075" rel="stylesheet"><link href="../../css/bar.css?1661265075" rel="stylesheet">
+
+    <script src="../../js/jquery-3.3.1.min.js?1661265075"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="../../output/demographic/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://pharmaverse.org"><img src="../../images/logo.png" alt="Logo"></a>
+    </div>
+    
+  </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='../../'><i class='fas fa-home'></i> Back to first page</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/data/" title="Data" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../data/">
+          <b>1. </b>Data
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/data/adsl/" title="Create ADSL" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../data/adsl/">
+          Create ADSL
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/output/" title="TLGs" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="../../output/">
+          <b>1. </b>TLGs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/output/demographic/" title="Create Demographic table" class="dd-item
+        
+        active
+        
+        ">
+      <a href="../../output/demographic/">
+          Create Demographic table
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/app/" title="IDDs/Apps" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../app/">
+          <b>1. </b>IDDs/Apps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/app/teal/" title="Create TEAL Shiny APP with demographic table" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../app/teal/">
+          Create TEAL Shiny APP with demographic table
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <p><a href="https://github.com/pharmaverse/end_to_end_examples"><i class="fab fa-github"></i> Source code</a></p>
+<p><a href="https://pharmaverse.org"><i class="fa fa-globe"></i> Main pharmaverse website</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/pharmaverse/end_to_end_examples/edit/develop/content/output/demographic/_index.html" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                   Create Demographic table
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Create Demographic table
+            </h1>
+          
+
+        
+
+
+
+	
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This guide will show you how two pharmaverse packages, along with some from tidyverse, can be used to create a Demographic table as an end-to-end, using the {admiral} ADSL data as an input.</p>
+<p>The two packages used with a brief description of their purpose are as follows:</p>
+<ul>
+<li><a href="https://roche.github.io/rtables/index.html"><code>{rtables}</code></a>: designed to create and display complex tables with R.</li>
+<li><a href="https://insightsengineering.github.io/tern/main/index.html"><code>{tern}</code></a>: contains analysis functions to create tables and graphs used for clinical trial reporting.</li>
+</ul>
+<p>It is important to understand <a href="https://roche.github.io/rtables/index.html"><code>{rtables}</code></a> grammar by reading through the above linked package site, as these are fundamental to being able to use <a href="https://insightsengineering.github.io/tern/main/index.html"><code>{tern}</code></a>.</p>
+</div>
+<div id="load-data-and-required-pharmaverse-packages" class="section level2">
+<h2>Load Data and Required pharmaverse Packages</h2>
+<p>After installation of packages, the first step is to load our pharmaverse packages and input data.</p>
+<pre class="r"><code>options(repos = c(
+  pharmaverse = &#39;https://pharmaverse.r-universe.dev&#39;,
+  CRAN = &#39;https://cloud.r-project.org&#39;))
+
+library(admiral)
+library(rtables)
+library(tern)
+library(dplyr)
+
+# Read in input ADaM data 
+data(&quot;admiral_adsl&quot;)</code></pre>
+</div>
+<div id="start-preprocessing" class="section level2">
+<h2>Start preprocessing</h2>
+<p>The first step we are going to encode missing entries across groups of categorical variables in a data frame <code>adsl</code>.</p>
+<pre class="r"><code>adsl &lt;- df_explicit_na(admiral_adsl)</code></pre>
+<p>Now we will add some pre-processing.</p>
+<pre class="r"><code>adsl &lt;- adsl %&gt;%
+  mutate(
+    SEX = factor(case_when(
+      SEX == &quot;M&quot; ~ &quot;Male&quot;,
+      SEX == &quot;F&quot; ~ &quot;Female&quot;,
+      SEX == &quot;U&quot; ~ &quot;Unknown&quot;,
+      SEX == &quot;UNDIFFERENTIATED&quot; ~ &quot;Undifferentiated&quot;
+    ))
+  ) </code></pre>
+<p>Now optionally we create lists: <code>vars</code> and <code>var_labels</code> which hold the variables and thier corresponding labels. We will use them in the next step.</p>
+<pre class="r"><code>vars &lt;- c(&quot;AGE&quot;, &quot;AGEGR1&quot;, &quot;SEX&quot;,&quot;RACE&quot;)
+
+var_labels &lt;- c(
+  &quot;Age (yr)&quot;,
+  &quot;Age groups&quot;,
+  &quot;Sex&quot;,
+  &quot;Race&quot;
+)</code></pre>
+<p>Now we create the demographic table using the <a href="https://roche.github.io/rtables/index.html"><code>{rtables}</code></a> and <a href="https://insightsengineering.github.io/tern/main/index.html"><code>{tern}</code></a> packages, and using <code>ARM</code> as the grouping variable.</p>
+<pre class="r"><code>result &lt;- basic_table() %&gt;%
+  split_cols_by(var = &quot;ARM&quot;) %&gt;%
+  add_colcounts() %&gt;%
+  summarize_vars(
+    vars = vars,
+    var_labels = var_labels
+  ) %&gt;%
+  build_table(adsl)
+
+result</code></pre>
+<pre><code>##                                        Placebo     Screen Failure   Xanomeline High Dose   Xanomeline Low Dose
+##                                        (N=86)          (N=52)              (N=84)                (N=84)       
+## ——————————————————————————————————————————————————————————————————————————————————————————————————————————————
+## Age (yr)                                                                                                      
+##   n                                      86              52                  84                    84         
+##   Mean (SD)                          75.2 (8.6)      75.1 (9.7)          74.4 (7.9)            75.7 (8.3)     
+##   Median                                76.0            76.0                76.0                  77.5        
+##   Min - Max                          52.0 - 89.0    50.0 - 89.0         56.0 - 88.0            51.0 - 88.0    
+## Age groups                                                                                                    
+##   n                                      86              52                  84                    84         
+##   &lt;18                                     0              0                   0                      0         
+##   18-64                              14 (16.3%)      9 (17.3%)           11 (13.1%)             8 (9.5%)      
+##   &gt;=65                               72 (83.7%)      43 (82.7%)          73 (86.9%)            76 (90.5%)     
+## Sex                                                                                                           
+##   n                                      86              52                  84                    84         
+##   Female                             53 (61.6%)      36 (69.2%)          40 (47.6%)            50 (59.5%)     
+##   Male                               33 (38.4%)      16 (30.8%)          44 (52.4%)            34 (40.5%)     
+## Race                                                                                                          
+##   n                                      86              52                  84                    84         
+##   AMERICAN INDIAN OR ALASKA NATIVE        0           1 (1.9%)            1 (1.2%)                  0         
+##   ASIAN                                   0           2 (3.8%)               0                      0         
+##   BLACK OR AFRICAN AMERICAN           8 (9.3%)       6 (11.5%)           9 (10.7%)              6 (7.1%)      
+##   WHITE                              78 (90.7%)      43 (82.7%)          74 (88.1%)            78 (92.9%)</code></pre>
+</div>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="../../output/" title="TLGs"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="../../app/" title="IDDs/Apps" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="../../js/clipboard.min.js?1661265075"></script>
+    <script src="../../js/perfect-scrollbar.min.js?1661265075"></script>
+    <script src="../../js/perfect-scrollbar.jquery.min.js?1661265075"></script>
+    <script src="../../js/jquery.sticky.js?1661265075"></script>
+    <script src="../../js/featherlight.min.js?1661265075"></script>
+    <script src="../../js/highlight.pack.js?1661265075"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="../../js/modernizr.custom-3.6.0.js?1661265075"></script>
+    <script src="../../js/learn.js?1661265075"></script>
+    <script src="../../js/hugo-learn.js?1661265075"></script>
+    
+        
+            <script src="https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>

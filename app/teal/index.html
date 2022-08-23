@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.101.0" />
+    <meta name="description" content="An example of how to create a Shiny APP using demographic module">
+
+
+    <link rel="icon" href="../../images/favicon.png" type="image/png">
+
+    <title>Create TEAL Shiny APP with demographic table - pharmaverse examples</title>
+
+    
+    <link href="../../css/nucleus.css?1661265075" rel="stylesheet">
+    <link href="../../css/fontawesome-all.min.css?1661265075" rel="stylesheet">
+    <link href="../../css/hybrid.css?1661265075" rel="stylesheet">
+    <link href="../../css/featherlight.min.css?1661265075" rel="stylesheet">
+    <link href="../../css/perfect-scrollbar.min.css?1661265075" rel="stylesheet">
+    <link href="../../css/auto-complete.css?1661265075" rel="stylesheet">
+    <link href="../../css/atom-one-dark-reasonable.css?1661265075" rel="stylesheet">
+    <link href="../../css/theme.css?1661265075" rel="stylesheet">
+    <link href="../../css/tabs.css?1661265075" rel="stylesheet">
+    <link href="../../css/hugo-theme.css?1661265075" rel="stylesheet">
+    
+    <link href="../../css/theme-red.css?1661265075" rel="stylesheet">
+    
+    <link href="../../css/foo.css?1661265075" rel="stylesheet"><link href="../../css/bar.css?1661265075" rel="stylesheet">
+
+    <script src="../../js/jquery-3.3.1.min.js?1661265075"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="../../app/teal/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a href="https://pharmaverse.org"><img src="../../images/logo.png" alt="Logo"></a>
+    </div>
+    
+  </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='../../'><i class='fas fa-home'></i> Back to first page</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/data/" title="Data" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../data/">
+          <b>1. </b>Data
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/data/adsl/" title="Create ADSL" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../data/adsl/">
+          Create ADSL
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/output/" title="TLGs" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../output/">
+          <b>1. </b>TLGs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/output/demographic/" title="Create Demographic table" class="dd-item
+        
+        
+        
+        ">
+      <a href="../../output/demographic/">
+          Create Demographic table
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/app/" title="IDDs/Apps" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="../../app/">
+          <b>1. </b>IDDs/Apps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/app/teal/" title="Create TEAL Shiny APP with demographic table" class="dd-item
+        
+        active
+        
+        ">
+      <a href="../../app/teal/">
+          Create TEAL Shiny APP with demographic table
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <p><a href="https://github.com/pharmaverse/end_to_end_examples"><i class="fab fa-github"></i> Source code</a></p>
+<p><a href="https://pharmaverse.org"><i class="fa fa-globe"></i> Main pharmaverse website</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/pharmaverse/end_to_end_examples/edit/develop/content/app/teal/_index.html" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                   Create TEAL Shiny APP with demographic table
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Create TEAL Shiny APP with demographic table
+            </h1>
+          
+
+        
+
+
+
+	
+
+
+<div id="section-introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This guide will show you how set of the pharmaverse packages can be used to create a a Shiny APP using demographic module end-to-end, using the {admiral} ADSL data as an input.</p>
+<p>The eight packages used with a brief description of their purpose are as follows:</p>
+<ul>
+<li><a href="https://insightsengineering.github.io/teal.widgets/main/index.html"><code>{teal.widgets</code></a>: provides various widgets for teal applications.</li>
+<li><a href="https://insightsengineering.github.io/teal.logger/main/index.html"><code>{teal.logger</code></a>: provides a unified setup for generating logs using the logger package.</li>
+<li><a href="https://insightsengineering.github.io/teal.code/main/index.html"><code>{teal.code</code></a>: provides tools to store code and an execution environment associated with it.</li>
+<li><a href="https://insightsengineering.github.io/teal.data/main/index.html"><code>{teal.data</code></a>: creates the data needed for teal applications.</li>
+<li><a href="https://insightsengineering.github.io/teal.slice/main/index.html"><code>{teal.slice</code></a>: used in the development of teal shiny modules</li>
+<li><a href="https://insightsengineering.github.io/teal.transform/main/index.html"><code>{teal.transform</code></a>: contains functions and shiny modules for extracting and merging data within the teal framework.</li>
+<li><a href="https://insightsengineering.github.io/teal/main/index.html"><code>{teal</code></a>: is a shiny-based interactive exploration framework for analyzing data</li>
+<li><a href="https://insightsengineering.github.io/teal.modules.clinical/main/index.html"><code>{teal.modules.clinical</code></a>: contains a set of standard teal modules to be used with CDISC data in order to generate many of the standard outputs used in clinical trials</li>
+</ul>
+<p>In this exmaple it is important to understand <a href="https://insightsengineering.github.io/teal.modules.clinical/main/index.html"><code>{teal.modules.clinical</code></a> in order to modify parameters to the teal module: <code>tm_t_summary</code>.</p>
+</div>
+<div id="section-load-data-and-required-pharmaverse-packages" class="section level2">
+<h2>Load Data and Required pharmaverse Packages</h2>
+<p>After installation of packages, the first step is to load our pharmaverse packages and input data.</p>
+<pre class="r"><code>options(repos = c(
+  pharmaverse = &#39;https://pharmaverse.r-universe.dev&#39;,
+  CRAN = &#39;https://cloud.r-project.org&#39;))
+
+library(admiral)
+library(rtables)
+library(tern)
+library(teal.widgets) 
+library(teal.logger) 
+library(teal.code) 
+library(teal.data) 
+library(teal.slice)
+library(teal.transform)
+library(teal)
+library(teal.modules.clinical)
+library(dplyr)
+
+# Read in input ADaM data 
+data(&quot;admiral_adsl&quot;)</code></pre>
+</div>
+<div id="section-start-preprocessing" class="section level2">
+<h2>Start preprocessing</h2>
+<p>In the first step we are going to encode missing entries across groups of categorical variables in a data frame <code>adsl</code>.</p>
+<pre class="r"><code>ADSL &lt;- df_explicit_na(admiral_adsl)</code></pre>
+<p>Now we will add some pre-processing.</p>
+<pre class="r"><code>ADSL &lt;- ADSL %&gt;%
+  mutate(
+    SEX = factor(case_when(
+      SEX == &quot;M&quot; ~ &quot;Male&quot;,
+      SEX == &quot;F&quot; ~ &quot;Female&quot;,
+      SEX == &quot;U&quot; ~ &quot;Unknown&quot;,
+      SEX == &quot;UNDIFFERENTIATED&quot; ~ &quot;Undifferentiated&quot;
+    ))
+  ) </code></pre>
+<p>Now we create the Shiny APP based on the module: <code>tm_t_summary</code>. Please note that the above two pre-processing steps are included in the code section below to allow reproducibility of the code.</p>
+<pre class="r"><code>app &lt;- init(
+  data = cdisc_data(
+    cdisc_dataset(&quot;ADSL&quot;, ADSL),
+    code = &#39;data(&quot;admiral_adsl&quot;)
+            ADSL &lt;- df_explicit_na(admiral_adsl)
+            ADSL &lt;- ADSL %&gt;%
+            mutate(
+              SEX = factor(case_when(
+                SEX == &quot;M&quot; ~ &quot;Male&quot;,
+                SEX == &quot;F&quot; ~ &quot;Female&quot;,
+                SEX == &quot;U&quot; ~ &quot;Unknown&quot;,
+                SEX == &quot;UNDIFFERENTIATED&quot; ~ &quot;Undifferentiated&quot;
+              ))
+            ) &#39;,
+    check = TRUE
+  ),
+  modules = modules(
+    tm_t_summary(
+      label = &quot;Demographic Table&quot;,
+      dataname = &quot;ADSL&quot;,
+      arm_var = choices_selected(c(&quot;ARM&quot;, &quot;ARMCD&quot;), &quot;ARM&quot;),
+      summarize_vars = choices_selected(
+        c(&quot;SEX&quot;, &quot;RACE&quot;, &quot;AGEGR1&quot;),
+        c(&quot;SEX&quot;, &quot;RACE&quot;)
+      ),
+      useNA = &quot;ifany&quot;
+    )
+  )
+)</code></pre>
+<pre><code>## [INFO] 2022-08-23 14:31:00.0598 pid:41800 token:[] teal.modules.clinical Initializing tm_t_summary</code></pre>
+<p>Now we run the shiny APP. Please note that parameter option is only used to control rendering of the Shiny APP.</p>
+<pre class="r"><code>shinyApp(app$ui, app$server,
+  options = list(width = 1200, height= 600))</code></pre>
+<p>While this code won’t work, as this website is static - you can see an
+example here: <a href="https://genentech.shinyapps.io/teal_efficacy/" class="uri">https://genentech.shinyapps.io/teal_efficacy/</a></p>
+</div>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="../../app/" title="IDDs/Apps"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="../../data/" title="Data" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="../../js/clipboard.min.js?1661265075"></script>
+    <script src="../../js/perfect-scrollbar.min.js?1661265075"></script>
+    <script src="../../js/perfect-scrollbar.jquery.min.js?1661265075"></script>
+    <script src="../../js/jquery.sticky.js?1661265075"></script>
+    <script src="../../js/featherlight.min.js?1661265075"></script>
+    <script src="../../js/highlight.pack.js?1661265075"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="../../js/modernizr.custom-3.6.0.js?1661265075"></script>
+    <script src="../../js/learn.js?1661265075"></script>
+    <script src="../../js/hugo-learn.js?1661265075"></script>
+    
+        
+            <script src="https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>

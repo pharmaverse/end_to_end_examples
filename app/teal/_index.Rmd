@@ -1,0 +1,123 @@
+---
+title: "Create TEAL Shiny APP with demographic table"
+author: "Tadeusz Lewandowski"
+date: "18/08/2022"
+output: html_document
+description: "An example of how to create a Shiny APP using demographic module"
+runtime: shiny
+---
+
+## Introduction
+
+This guide will show you how set of the pharmaverse packages can be used to create a a Shiny APP using demographic module end-to-end, using the {admiral} ADSL data as an input.
+
+The eight packages used with a brief description of their purpose are as follows:
+
+* [`{teal.widgets`](https://insightsengineering.github.io/teal.widgets/main/index.html): provides various widgets for teal applications.
+* [`{teal.logger`](https://insightsengineering.github.io/teal.logger/main/index.html): provides a unified setup for generating logs using the logger package.
+* [`{teal.code`](https://insightsengineering.github.io/teal.code/main/index.html): provides tools to store code and an execution environment associated with it.
+* [`{teal.data`](https://insightsengineering.github.io/teal.data/main/index.html): creates the data needed for teal applications.
+* [`{teal.slice`](https://insightsengineering.github.io/teal.slice/main/index.html): used in the development of teal shiny modules
+* [`{teal.transform`](https://insightsengineering.github.io/teal.transform/main/index.html): contains functions and shiny modules for extracting and merging data within the teal framework.
+* [`{teal`](https://insightsengineering.github.io/teal/main/index.html): is a shiny-based interactive exploration framework for analyzing data
+* [`{teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/main/index.html): contains a set of standard teal modules to be used with CDISC data in order to generate many of the standard outputs used in clinical trials
+
+
+In this exmaple it is important to understand [`{teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/main/index.html) in order to modify parameters to the teal module: `tm_t_summary`.
+
+## Load Data and Required pharmaverse Packages
+
+After installation of packages, the first step is to load our pharmaverse packages and input data.
+
+```{r setup, message=FALSE, warning=FALSE, results='hold'}
+options(repos = c(
+  pharmaverse = 'https://pharmaverse.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+
+library(admiral)
+library(rtables)
+library(tern)
+library(teal.widgets) 
+library(teal.logger) 
+library(teal.code) 
+library(teal.data) 
+library(teal.slice)
+library(teal.transform)
+library(teal)
+library(teal.modules.clinical)
+library(dplyr)
+
+# Read in input ADaM data 
+data("admiral_adsl")
+
+```
+  
+## Start preprocessing
+
+In the first step we are going to encode missing entries across groups of categorical variables in a data frame `adsl`.
+
+
+```{r, error=TRUE}
+ADSL <- df_explicit_na(admiral_adsl)
+```
+
+Now we will add some pre-processing.
+
+```{r, error=TRUE }
+ADSL <- ADSL %>%
+  mutate(
+    SEX = factor(case_when(
+      SEX == "M" ~ "Male",
+      SEX == "F" ~ "Female",
+      SEX == "U" ~ "Unknown",
+      SEX == "UNDIFFERENTIATED" ~ "Undifferentiated"
+    ))
+  ) 
+
+```
+
+Now we create the Shiny APP based on the module: `tm_t_summary`. Please note that the above two pre-processing steps are included in the code section below to allow reproducibility of the code.
+
+```{r, error=TRUE}
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset("ADSL", ADSL),
+    code = 'data("admiral_adsl")
+            ADSL <- df_explicit_na(admiral_adsl)
+            ADSL <- ADSL %>%
+            mutate(
+              SEX = factor(case_when(
+                SEX == "M" ~ "Male",
+                SEX == "F" ~ "Female",
+                SEX == "U" ~ "Unknown",
+                SEX == "UNDIFFERENTIATED" ~ "Undifferentiated"
+              ))
+            ) ',
+    check = TRUE
+  ),
+  modules = modules(
+    tm_t_summary(
+      label = "Demographic Table",
+      dataname = "ADSL",
+      arm_var = choices_selected(c("ARM", "ARMCD"), "ARM"),
+      summarize_vars = choices_selected(
+        c("SEX", "RACE", "AGEGR1"),
+        c("SEX", "RACE")
+      ),
+      useNA = "ifany"
+    )
+  )
+)
+
+```
+
+Now we run the shiny APP. Please note that parameter option is only used to control rendering of the Shiny APP. 
+
+```{r, eval = FALSE}
+shinyApp(app$ui, app$server,
+  options = list(width = 1200, height= 600))
+```
+
+While this code won't work, as this website is static - you can see an 
+example here: https://genentech.shinyapps.io/teal_efficacy/
+

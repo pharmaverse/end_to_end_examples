@@ -4,9 +4,17 @@
   <url>
     <loc>/data/</loc>
   </url><url>
+    <loc>/output/</loc>
+  </url><url>
+    <loc>/app/</loc>
+  </url><url>
     <loc>/categories/</loc>
   </url><url>
     <loc>/data/adsl/</loc>
+  </url><url>
+    <loc>/output/demographic/</loc>
+  </url><url>
+    <loc>/app/teal/</loc>
   </url><url>
     <loc>/</loc>
   </url><url>
