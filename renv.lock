@@ -41,26 +41,19 @@
       "Repository": "CRAN",
       "Hash": "642812f46e5fb638c01150f2a2b5db44"
     },
-    "KernSmooth": {
-      "Package": "KernSmooth",
-      "Version": "2.23-20",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8dcfa99b14c296bc9f1fd64d52fd3ce7"
-    },
     "MASS": {
       "Package": "MASS",
-      "Version": "7.3-54",
+      "Version": "7.3-57",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0e59129db205112e3963904db67fd0dc"
+      "Hash": "71476c1d88d1ebdf31580e5a257d5d31"
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.3-4",
+      "Version": "1.4-1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4ed05e9c9726267e4a5872e09c04587c"
+      "Hash": "699c47c606293bdfbc9fd78a93c9c8fe"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -183,14 +176,20 @@
       "Package": "admiral",
       "Version": "0.7.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "https://pharmaverse.r-universe.dev",
+      "RemoteUrl": "https://github.com/pharmaverse/admiral",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "dfb6489254dc3f2cce77da3a06e5fd1fd757aa55",
       "Hash": "2dd8b1cb99e29edb7e470bc3db9abbc1"
     },
     "admiral.test": {
       "Package": "admiral.test",
       "Version": "0.2.0",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "https://pharmaverse.r-universe.dev",
+      "RemoteUrl": "https://github.com/pharmaverse/admiral.test",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "927cc432cbf0aac4c9c472296d56ae5bae633a53",
       "Hash": "a15d620cfb0a3d521d9c062fab8e9605"
     },
     "anytime": {
@@ -314,10 +313,10 @@
     },
     "callr": {
       "Package": "callr",
-      "Version": "3.7.1",
+      "Version": "3.7.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2fda237f24bc56508f31394beaa56877"
+      "Hash": "358689cac9fe93b1bb3a19088d2dbed8"
     },
     "car": {
       "Package": "car",
@@ -347,19 +346,12 @@
       "Repository": "CRAN",
       "Hash": "a667800d5f0350371bedeb8b8b950289"
     },
-    "class": {
-      "Package": "class",
-      "Version": "7.3-20",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "da09d82223e669d270e47ed24ac8686e"
-    },
     "cli": {
       "Package": "cli",
-      "Version": "3.2.0",
+      "Version": "3.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "1bdb126893e9ce6aae50ad1d6fc32faf"
+      "Hash": "23abf173c2b783dcc43379ab9bba00ee"
     },
     "clipr": {
       "Package": "clipr",
@@ -370,10 +362,10 @@
     },
     "cluster": {
       "Package": "cluster",
-      "Version": "2.1.2",
+      "Version": "2.1.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ce49bfe5bc0b3ecd43a01fe1b01c2243"
+      "Hash": "c5f8447373ec2a0f593c694024e5b7ee"
     },
     "codetools": {
       "Package": "codetools",
@@ -524,27 +516,27 @@
     },
     "forcats": {
       "Package": "forcats",
-      "Version": "0.5.1",
+      "Version": "0.5.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "81c3244cab67468aac4c60550832655d"
+      "Hash": "9d95bc88206321cd1bc98480ecfd74bb"
     },
     "foreign": {
       "Package": "foreign",
-      "Version": "0.8-81",
+      "Version": "0.8-82",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "74628ea7a3be5ee8a7b5bb0a8e84882e"
+      "Hash": "32b25c97ce306a760c4d9f787991b5d9"
     },
     "formatters": {
       "Package": "formatters",
-      "Version": "0.3.2.5",
+      "Version": "0.3.3.1",
       "Source": "Repository",
       "Repository": "https://pharmaverse.r-universe.dev",
       "RemoteUrl": "https://github.com/insightsengineering/formatters",
       "RemoteRef": "HEAD",
-      "RemoteSha": "d6d22f84d4d799ef8574e9771299637ca5687f85",
-      "Hash": "40dd04a64c392ea062bddaa7f3658ea5"
+      "RemoteSha": "1d0765498975836d5ad23ace3ee992c6128d4392",
+      "Hash": "49f4ef814b8fda64153cdc72f30a6503"
     },
     "fs": {
       "Package": "fs",
@@ -780,14 +772,14 @@
       "RemoteUsername": "atorus-research",
       "RemoteRef": "HEAD",
       "RemoteSha": "56f4c88ca055e177aff50c21abf4b951418b45c5",
-      "Hash": "4e16eac44331a392e1cdff4884f707bc"
+      "Hash": "657781a6fc08e2aa6328904c59dc335b"
     },
     "metatools": {
       "Package": "metatools",
       "Version": "0.1.0",
       "Source": "GitHub",
-      "RemoteType": "github",
       "Remotes": "atorus-research/metacore",
+      "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "metatools",
       "RemoteUsername": "pharmaverse",
@@ -797,10 +789,10 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-36",
+      "Version": "1.8-40",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "93cc747b0e1ad882a4570463c3575c23"
+      "Hash": "c6b2fdb18cf68ab613bd564363e1ba0d"
     },
     "mime": {
       "Package": "mime",
@@ -818,15 +810,15 @@
     },
     "mmrm": {
       "Package": "mmrm",
-      "Version": "0.1.0",
+      "Version": "0.1.0.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "openpharma",
       "RemoteRepo": "mmrm",
       "RemoteRef": "main",
-      "RemoteSha": "097b9eef221b87953e85e926c97b6bd474a8f374",
-      "Hash": "d7fcc3b7500fdfb5b852fb797ea9a273"
+      "RemoteSha": "591816dcf705afeae8d65353daae92b12a263cb4",
+      "Hash": "432d85911f06bd5357cc6ffb20512237"
     },
     "munsell": {
       "Package": "munsell",
@@ -854,10 +846,10 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-153",
+      "Version": "3.1-158",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2d632e0d963a653a0329756ce701ecdd"
+      "Hash": "9469aeaeddf4f48a7ac70877d0b7ba36"
     },
     "nloptr": {
       "Package": "nloptr",
@@ -868,10 +860,10 @@
     },
     "nnet": {
       "Package": "nnet",
-      "Version": "7.3-16",
+      "Version": "7.3-17",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3a3dc184000bc9e6c145c4dbde4dd702"
+      "Hash": "cb1d8d9f300a7e536b89c8a88c53f610"
     },
     "numDeriv": {
       "Package": "numDeriv",
@@ -1036,10 +1028,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.0.1",
+      "Version": "1.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3bf0219f19d9f5b3c682acbb3546a151"
+      "Hash": "6539dd8c651e67e3b55b5ffea106362b"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
@@ -1050,10 +1042,10 @@
     },
     "rpart": {
       "Package": "rpart",
-      "Version": "4.1-15",
+      "Version": "4.1.16",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9787c1fcb680e655d062e7611cadf78e"
+      "Hash": "ea3ca1d9473daabb3cd0f1b4f974c1ed"
     },
     "rprojroot": {
       "Package": "rprojroot",
@@ -1079,13 +1071,6 @@
       "RemoteSha": "2ef1d5849c7903cd2de6cb6c8b06fd69a65e7e00",
       "Hash": "a1024cde8447f2934de6744e9e018136"
     },
-    "safetyData": {
-      "Package": "safetyData",
-      "Version": "1.0.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "d934146c0afeff997f285ee0c61bdcc5"
-    },
     "sass": {
       "Package": "sass",
       "Version": "0.4.2",
@@ -1099,16 +1084,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6f76f71042411426ec8df6c54f34e6dd"
-    },
-    "scda.2022": {
-      "Package": "scda.2022",
-      "Version": "0.1.2",
-      "Source": "Repository",
-      "Repository": "https://pharmaverse.r-universe.dev",
-      "RemoteUrl": "https://github.com/insightsengineering/scda.2022",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "9c1f4ab690780ef58880b15cbb4e27ab176943de",
-      "Hash": "7cc8fc4ac3d4015e1528341c9fe9c69d"
     },
     "servr": {
       "Package": "servr",
@@ -1166,13 +1141,6 @@
       "Repository": "CRAN",
       "Hash": "2a118bdd2db0a301711e0a9e3e3206d5"
     },
-    "spatial": {
-      "Package": "spatial",
-      "Version": "7.3-15",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c23666fdb7789c8a45e65340bb334607"
-    },
     "stringi": {
       "Package": "stringi",
       "Version": "1.7.6",
@@ -1196,10 +1164,10 @@
     },
     "survival": {
       "Package": "survival",
-      "Version": "3.2-13",
+      "Version": "3.3-1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6f0a0fadc63bc6570fe172770f15bbc4"
+      "Hash": "f6189c70451d3d68e0d571235576e833"
     },
     "sys": {
       "Package": "sys",
@@ -1285,14 +1253,14 @@
     },
     "teal.transform": {
       "Package": "teal.transform",
-      "Version": "0.1.1.9013",
+      "Version": "0.1.1.9014",
       "Source": "Repository",
       "Repository": "https://pharmaverse.r-universe.dev",
       "Remotes": "insightsengineering/scda.2021@*release,\ninsightsengineering/scda@*release,\ninsightsengineering/teal.code@*release,\ninsightsengineering/teal.data@*release,\ninsightsengineering/teal.logger@*release,\ninsightsengineering/teal.slice@*release,\ninsightsengineering/teal.widgets@*release",
       "RemoteUrl": "https://github.com/insightsengineering/teal.transform",
       "RemoteRef": "HEAD",
-      "RemoteSha": "8bff27130125046ca95915c1bb07c303449f0b55",
-      "Hash": "825003d9660d6f3b10db17431a2e345b"
+      "RemoteSha": "25bf79325a7fe52dde275dcd8fe5d12f5f901229",
+      "Hash": "4c120b54859f477fef8a12fb38fa4ddc"
     },
     "teal.widgets": {
       "Package": "teal.widgets",
@@ -1306,14 +1274,14 @@
     },
     "tern": {
       "Package": "tern",
-      "Version": "0.7.9",
+      "Version": "0.7.9.9000",
       "Source": "Repository",
       "Repository": "https://pharmaverse.r-universe.dev",
       "Remotes": "insightsengineering/scda.2022@*release,\ninsightsengineering/scda@*release",
       "RemoteUrl": "https://github.com/insightsengineering/tern",
       "RemoteRef": "HEAD",
-      "RemoteSha": "a34af524582e674a025b45df9a98ddb8cbf8774b",
-      "Hash": "c2531955ebfdebd1efe135c227a5fdea"
+      "RemoteSha": "a4ad5e8a9db67042bbfb6f8e6085fec67936410b",
+      "Hash": "a3bd0ea6877991e6c1db1ae8a4011e87"
     },
     "tern.mmrm": {
       "Package": "tern.mmrm",
