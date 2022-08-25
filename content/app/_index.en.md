@@ -1,7 +1,7 @@
 ---
 title: IDDs/Apps
-weight: 4
-pre: "<b>1. </b>"
+weight: 3
+pre: "<b>3. </b>"
 chapter: true
 description: "Shiny APP"
 ---
