@@ -3,7 +3,7 @@ title: "Create Demographic table"
 author: "Tadeusz Lewandowski"
 date: "16/08/2022"
 output: html_document
-description: "An example of how to generate an Demographic output based on ADaM dataset"
+description: "An example of how to generate a Demographic output based on ADaM dataset"
 ---
 
 ## Introduction
