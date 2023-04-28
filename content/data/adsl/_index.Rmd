@@ -38,6 +38,12 @@ library(tidyr)
 library(lubridate)
 library(stringr)
 
+# Here shows which pharmaverse package versions we're using in this example as FYI
+packageVersion("metacore")
+packageVersion("metatools")
+packageVersion("admiral")
+packageVersion("xportr")
+
 # Read in input SDTM data 
 data("admiral_dm")
 data("admiral_ex")
@@ -102,42 +108,50 @@ head(adsl_ct, n=10)
 
 Now we have sorted out what we can easily do with controlled terminology it is time to start deriving some variables.
 Here you could refer directly to using the `{admiral}` template and [vignette](https://pharmaverse.github.io/admiral/articles/adsl.html) in practice, but for the purpose of this end-to-end ADaM vignette we will share a few exposure derivations from there.
-We derive the start and end of treatment, the treatment duration, and the safety population flag.
+We derive the start and end of treatment (which requires dates to first be converted from DTC to DTM), the treatment duration, and the safety population flag.
 
 ```{r exposure}
+ex_ext <- admiral_ex %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "last"
+  )
+
 adsl_raw <- adsl_ct %>%
-  derive_vars_merged_dtm(
-    dataset_add = admiral_ex,
+  derive_vars_merged(
+    dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10,
-    new_vars_prefix = "TRTS",
-    dtc = EXSTDTC,
-    order = vars(TRTSDTM, EXSEQ),
+    new_vars = exprs(TRTSDTM = EXSTDTM),
+    order = exprs(EXSTDTM, EXSEQ),
     mode = "first",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
-  derive_vars_merged_dtm(
-    dataset_add = admiral_ex,
+  derive_vars_merged(
+    dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
       (EXDOSE == 0 &
         str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10,
-    new_vars_prefix = "TRTE",
-    dtc = EXENDTC,
-    time_imputation = "last",
-    order = vars(TRTEDTM, EXSEQ),
+    new_vars = exprs(TRTEDTM = EXENDTM),
+    order = exprs(EXENDTM, EXSEQ),
     mode = "last",
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   ) %>%
-   derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%  #Convert Datetime variables to date 
+   derive_vars_dtm_to_dt(source_vars = exprs(TRTSDTM, TRTEDTM)) %>%  #Convert Datetime variables to date 
    derive_var_trtdurd() %>% 
    derive_var_merged_exist_flag(
      dataset_add = admiral_ex,
-     by_vars = vars(STUDYID, USUBJID),
+     by_vars = exprs(STUDYID, USUBJID),
      new_var = SAFFL,
      condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
    ) %>% 
-   drop_unspec_vars(metacore) #This will drop any columns that aren't specificed in the metacore object
+   drop_unspec_vars(metacore) #This will drop any columns that aren't specified in the metacore object
 
 head(adsl_raw, n=10)
 ```
