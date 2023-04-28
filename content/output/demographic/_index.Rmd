@@ -31,6 +31,11 @@ library(rtables)
 library(tern)
 library(dplyr)
 
+# Here shows which pharmaverse package versions we're using in this example as FYI
+packageVersion("admiral")
+packageVersion("rtables")
+packageVersion("tern")
+
 # Read in input ADaM data 
 data("admiral_adsl")
 

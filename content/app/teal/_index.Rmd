@@ -47,6 +47,12 @@ library(teal)
 library(teal.modules.clinical)
 library(dplyr)
 
+# Here shows which pharmaverse package versions we're using in this example as FYI
+packageVersion("admiral")
+packageVersion("rtables")
+packageVersion("tern")
+packageVersion("teal")
+
 # Read in input ADaM data 
 data("admiral_adsl")
 
