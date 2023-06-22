@@ -494,9 +494,9 @@ dir <- "content/data/adpc"
 adppk_xpt <- adppk %>%
   xportr_type(adppk_spec, "ADPPK") %>%
   xportr_label(adppk_spec, "ADPPK") %>%
-  #xportr_format(adppk_spec, "ADPPK") %>%
+  xportr_format(adppk_spec, "ADPPK") %>%
   xportr_order(adppk_spec, "ADPPK") %>%
-  #xportr_length(adppk_spec, "ADPPK") %>%
+  xportr_length(adppk_spec, "ADPPK") %>%
   xportr_write(file.path(dir, "adppk.xpt"), label = "PK Concentration Analysis")
 
 
