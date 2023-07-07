@@ -75,7 +75,7 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project o
 
 # ---- Load Specs for Metacore ----
 
-metacore <- spec_to_metacore("content/data/adpc/pk_spec.xlsx") %>%
+metacore <- spec_to_metacore("pk_spec.xlsx") %>%
   select_dataset("ADPC")
 
 
@@ -567,8 +567,6 @@ adpc_prefinal <- adpc_baselines %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-dir <- "content/data/adpc"
-
 # Apply metadata and perform associated checks ----
 # uses {metatools}
 
@@ -585,11 +583,11 @@ adpc_xpt <- adpc %>%
   xportr_label(metacore) %>% # Assigns variable label from metacore specifications
   xportr_format(metacore) %>% # Assigns variable format from metacore specifications
   xportr_df_label(metacore) %>% # Assigns dataset label from metacore specifications
-  xportr_write(file.path(dir, "adpc.xpt")) # Write xpt v5 transport file
+  xportr_write("adpc.xpt") # Write xpt v5 transport file
 
 # ---- Save output ----
 
-saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
+saveRDS(adpc, file = "adpc.rds", compress = "bzip2")
 
 
 adpc
@@ -619,7 +617,7 @@ library(readr)
 library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
 # ---- Load Specs for Metacore ----
 
-metacore <- spec_to_metacore("content/data/adpc/pk_spec.xlsx") %>%
+metacore <- spec_to_metacore("pk_spec.xlsx") %>%
   select_dataset("ADPPK")
 
 # ---- Load source datasets ----
@@ -1100,14 +1098,14 @@ adppk_xpt <- adppk %>%
   xportr_label(metacore) %>% # Assigns variable label from metacore specifications
   xportr_format(metacore) %>% # Assigns variable format from metacore specifications
   xportr_df_label(metacore) %>% # Assigns dataset label from metacore specifications
-  xportr_write(file.path(dir, "adppk.xpt")) # Write xpt v5 transport file
+  xportr_write("adppk.xpt") # Write xpt v5 transport file
 
 # ---- Save output ----
 
-saveRDS(adppk, file = file.path(dir, "adppk.rds"), compress = "bzip2")
+saveRDS(adppk, file = "adppk.rds", compress = "bzip2")
 
 # Write CSV
-write_csv(adppk_xpt, "content/data/adpc/adppk.csv")
+write_csv(adppk_xpt, "adppk.csv")
 
 
 adppk
