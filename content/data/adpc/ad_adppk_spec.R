@@ -9,8 +9,16 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
+library(metacore)
+library(metatools)
+library(xportr)
+library(readr)
 
 library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
+# ---- Load Specs for Metacore ----
+
+metacore <- spec_to_metacore("content/data/adpc/pk_spec.xlsx") %>%
+  select_dataset("ADPPK")
 
 # ---- Load source datasets ----
 
@@ -460,7 +468,7 @@ covar_vslb <- covar %>%
 
 # Combine covariates with APPPK data
 
-adppk <- adppk_aseq %>%
+adppk_prefinal <- adppk_aseq %>%
   derive_vars_merged(
     dataset_add = covar_vslb,
     by_vars = exprs(STUDYID, USUBJID)
@@ -471,48 +479,32 @@ adppk <- adppk_aseq %>%
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
-# ---- Save output ----
-
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(adppk, file = file.path(dir, "adppk.rds"), compress = "bzip2")
-
-
-# Add Spec Data and Save Transport File
-library(xportr)
-library(readr)
-
-# Read in prepared spec file for ADPPK ----
-adppk_spec <- readxl::read_xlsx("content/data/adpc/ADPPK_spec_text.xlsx", sheet = "ADPPK") %>%
-  dplyr::rename(variable = "Variable Name", label = "Variable Label") %>%
-  rlang::set_names(tolower) %>%
-  dplyr::mutate(order = row_number(),
-                variable = str_trim(variable))
-
 
 dir <- "content/data/adpc"
 
+# Apply metadata and perform associated checks ----
+# uses {metatools}
+
+adppk <- adppk_prefinal %>%
+  drop_unspec_vars(metacore) %>% # Drop unspecified variables from specs
+  #check_variables(metacore) %>% # Check all variables specified are present and no more
+  check_ct_data(metacore) %>% # Checks all variables with CT only contain values within the CT
+  order_cols(metacore) %>% # Orders the columns according to the spec
+  sort_by_key(metacore) # Sorts the rows by the sort keys
+
 adppk_xpt <- adppk %>%
-  xportr_type(adppk_spec, "ADPPK") %>%
-  xportr_label(adppk_spec, "ADPPK") %>%
-  xportr_format(adppk_spec, "ADPPK") %>%
-  xportr_order(adppk_spec, "ADPPK") %>%
-  xportr_length(adppk_spec, "ADPPK") %>%
-  xportr_write(file.path(dir, "adppk.xpt"), label = "PK Concentration Analysis")
+  xportr_type(metacore) %>% # Coerce variable type to match spec
+  xportr_length(metacore) %>% # Assigns SAS length from a variable level metadata
+  xportr_label(metacore) %>% # Assigns variable label from metacore specifications
+  xportr_format(metacore) %>% # Assigns variable format from metacore specifications
+  xportr_df_label(metacore) %>% # Assigns dataset label from metacore specifications
+  xportr_write(file.path(dir, "adppk.xpt")) # Write xpt v5 transport file
 
+# ---- Save output ----
 
-# Columns in dataset
-adppk_cols <- colnames(adppk)
-
-# Columns in Spec
-spec_cols <- unique(adppk_spec$variable)
-
-# In Dataset and Not Spec
-setdiff(adppk_cols, spec_cols)
-
-# In Spec and Not Dataset
-setdiff(spec_cols, adppk_cols)
-
+saveRDS(adppk, file = file.path(dir, "adppk.rds"), compress = "bzip2")
 
 # Write CSV
 write_csv(adppk_xpt, "content/data/adpc/adppk.csv")
+
 

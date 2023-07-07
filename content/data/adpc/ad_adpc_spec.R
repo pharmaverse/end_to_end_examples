@@ -10,8 +10,17 @@ library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
+library(metacore)
+library(metatools)
+library(xportr)
 
 library(admiral.test) # Contains example datasets from the CDISC pilot project or simulated
+
+# ---- Load Specs for Metacore ----
+
+metacore <- spec_to_metacore("content/data/adpc/pk_spec.xlsx") %>%
+  select_dataset("ADPC")
+
 
 # ---- Load source datasets ----
 
@@ -491,7 +500,7 @@ adpc_baselines <- adpc_aseq %>%
 # ---- Add all ADSL variables ----
 
 # Add all ADSL variables
-adpc <- adpc_baselines %>%
+adpc_prefinal <- adpc_baselines %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)
@@ -500,26 +509,29 @@ adpc <- adpc_baselines %>%
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
-# ---- Save output ----
-
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
-
-# Add Spec Data and Save Transport File
 
 dir <- "content/data/adpc"
 
-# Read in prepared spec file for ADPC ----
-adpc_spec <- readxl::read_xlsx("content/data/adpc/adpc_spec_text.xlsx", sheet = "Variables") %>%
-  dplyr::rename(type = "Data Type") %>%
-  rlang::set_names(tolower) %>%
-  mutate(format = str_to_lower(format))
+# Apply metadata and perform associated checks ----
+# uses {metatools}
 
+adpc <- adpc_prefinal %>%
+  drop_unspec_vars(metacore) %>% # Drop unspecified variables from specs
+  check_variables(metacore) %>% # Check all variables specified are present and no more
+  check_ct_data(metacore) %>% # Checks all variables with CT only contain values within the CT
+  order_cols(metacore) %>% # Orders the columns according to the spec
+  sort_by_key(metacore) # Sorts the rows by the sort keys
 
 adpc_xpt <- adpc %>%
-  xportr_type(adpc_spec, "ADPC") %>%
-  xportr_label(adpc_spec, "ADPC") %>%
-  xportr_format(adpc_spec, "ADPC") %>%
-  xportr_order(adpc_spec, "ADPC") %>%
-  xportr_length(adpc_spec, "ADPC") %>%
-  xportr_write(file.path(dir, "adpc.xpt"), label = "PK Concentration Analysis")
+  xportr_type(metacore) %>% # Coerce variable type to match spec
+  xportr_length(metacore) %>% # Assigns SAS length from a variable level metadata
+  xportr_label(metacore) %>% # Assigns variable label from metacore specifications
+  xportr_format(metacore) %>% # Assigns variable format from metacore specifications
+  xportr_df_label(metacore) %>% # Assigns dataset label from metacore specifications
+  xportr_write(file.path(dir, "adpc.xpt")) # Write xpt v5 transport file
+
+# ---- Save output ----
+
+saveRDS(adpc, file = file.path(dir, "adpc.rds"), compress = "bzip2")
+
+
