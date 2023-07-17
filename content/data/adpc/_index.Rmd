@@ -961,64 +961,30 @@ adppk_aseq <- adppk_aval %>%
 # Include numeric values for STUDYIDN, USUBJIDN, SEXN, RACEN etc.
 
 covar <- adsl %>%
+  create_var_from_codelist(metacore, input_var = STUDYID, out_var = STUDYIDN) %>% 
+  create_var_from_codelist(metacore, input_var = SEX, out_var = SEXN) %>% 
+  create_var_from_codelist(metacore, input_var = RACE, out_var = RACEN) %>% 
+  create_var_from_codelist(metacore, input_var = ETHNIC, out_var = AETHNIC) %>% 
+  create_var_from_codelist(metacore, input_var = AETHNIC, out_var = AETHNICN) %>% 
+  create_var_from_codelist(metacore, input_var = ARMCD, out_var = COHORT) %>% 
+  create_var_from_codelist(metacore, input_var = ARMCD, out_var = COHORTC) %>% 
+  create_var_from_codelist(metacore, input_var = COUNTRY, out_var = COUNTRYN) %>% 
+  create_var_from_codelist(metacore, input_var = COUNTRY, out_var = COUNTRYL) %>% 
   mutate(
     STUDYIDN = as.numeric(word(USUBJID, 1, sep = fixed("-"))),
     SITEIDN = as.numeric(word(USUBJID, 2, sep = fixed("-"))),
     USUBJIDN = as.numeric(word(USUBJID, 3, sep = fixed("-"))),
     SUBJIDN = as.numeric(SUBJID),
-    SEXN = case_when(
-      SEX == "M" ~ 1,
-      SEX == "F" ~ 2,
-      TRUE ~ 3
-    ),
-    RACEN = case_when(
-      RACE == "AMERICAN INDIAN OR ALASKA NATIVE" ~ 1,
-      RACE == "ASIAN" ~ 2,
-      RACE == "BLACK OR AFRICAN AMERICAN" ~ 3,
-      RACE == "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" ~ 4,
-      RACE == "WHITE" ~ 5,
-      TRUE ~ 6
-    ),
-    ETHNICN = case_when(
-      ETHNIC == "HISPANIC OR LATINO" ~ 1,
-      ETHNIC == "NOT HISPANIC OR LATINO" ~ 2,
-      TRUE ~ 3
-    ),
-    ARMN = case_when(
-      ARM == "Placebo" ~ 0,
-      ARM == "Xanomeline Low Dose" ~ 1,
-      ARM == "Xanomeline High Dose" ~ 2,
-      TRUE ~ 3
-    ),
-    ACTARMN = case_when(
-      ACTARM == "Placebo" ~ 0,
-      ACTARM == "Xanomeline Low Dose" ~ 1,
-      ACTARM == "Xanomeline High Dose" ~ 2,
-      TRUE ~ 3
-    ),
-    COHORT = ARMN,
-    COHORTC = ARM,
     ROUTE = unique(ex$EXROUTE),
-    ROUTEN = case_when(
-      ROUTE == "TRANSDERMAL" ~ 3,
-      TRUE ~ NA_real_
-    ),
     FORM = unique(ex$EXDOSFRM),
-    FORMN = case_when(
-      FORM == "PATCH" ~ 3,
-      TRUE ~ 4
-    ),
-    COUNTRYN = case_when(
-      COUNTRY == "USA" ~ 1,
-      COUNTRY == "CAN" ~ 2,
-      COUNTRY == "GBR" ~ 3
-    ),
-    REGION1N = COUNTRYN,
+    REGION1N = COUNTRYN
   ) %>%
+  create_var_from_codelist(metacore, input_var = FORM, out_var = FORMN) %>% 
+  create_var_from_codelist(metacore, input_var = ROUTE, out_var = ROUTEN) %>% 
   select(
     STUDYID, STUDYIDN, SITEID, SITEIDN, USUBJID, USUBJIDN,
     SUBJID, SUBJIDN, AGE, SEX, SEXN, COHORT, COHORTC, ROUTE, ROUTEN,
-    RACE, RACEN, ETHNIC, ETHNICN, FORM, FORMN, COUNTRY, COUNTRYN,
+    RACE, RACEN, AETHNIC, AETHNICN, FORM, FORMN, COUNTRY, COUNTRYN,
     REGION1, REGION1N
   )
 
